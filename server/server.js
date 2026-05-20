@@ -15,7 +15,12 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://nightclub-9u85.vercel.app/",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
