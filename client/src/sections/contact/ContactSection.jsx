@@ -8,7 +8,6 @@ import {
 const ContactSection = () => {
   return (
     <section className="relative py-32 px-6 bg-[#070A12] overflow-hidden">
-
       {/* Soft Neon Background (different from booking section) */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[160px] rounded-full" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/10 blur-[160px] rounded-full" />
@@ -17,7 +16,6 @@ const ContactSection = () => {
       <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#ffffff22_1px,transparent_1px),linear-gradient(to_bottom,#ffffff22_1px,transparent_1px)] bg-[size:100px_100px]" />
 
       <div className="container-width relative z-10">
-
         {/* Heading */}
         <div className="text-center mb-20">
           <p className="text-cyan-400 uppercase tracking-[0.35em] text-sm mb-5">
@@ -33,17 +31,15 @@ const ContactSection = () => {
           </h2>
 
           <p className="text-gray-400 mt-8 max-w-2xl mx-auto text-lg">
-            We’re always ready to bring you into the most exclusive nightlife experience.
-            Reach out, book, or visit us for unforgettable nights.
+            We’re always ready to bring you into the most exclusive nightlife
+            experience. Reach out, book, or visit us for unforgettable nights.
           </p>
         </div>
 
         {/* Grid */}
         <div className="grid lg:grid-cols-2 gap-14 items-start">
-
           {/* LEFT CARDS */}
           <div className="space-y-6">
-
             {[
               {
                 icon: <FaPhoneAlt />,
@@ -53,7 +49,7 @@ const ContactSection = () => {
               {
                 icon: <FaMapMarkerAlt />,
                 title: "Location",
-                value: "VIP Road, Bhopal, Madhya Pradesh",
+                value: "Deendayal, Jabalpur, Madhya Pradesh",
               },
               {
                 icon: <FaClock />,
@@ -63,8 +59,8 @@ const ContactSection = () => {
               {
                 icon: <FaInstagram />,
                 title: "Instagram",
-                value: "@nightclub",
-                link: "https://instagram.com",
+                value: "@dcasapub",
+                link: "https://instagram.com/dcasapub",
               },
             ].map((item, index) => (
               <div
@@ -132,10 +128,20 @@ const ContactSection = () => {
             "
           >
             {/* Map Glow Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
+            <div
+              className="
+    absolute
+    inset-0
+    bg-gradient-to-t from-black via-transparent to-transparent
+    z-10
+    pointer-events-none
+    group-hover:opacity-30
+    transition
+  "
+            />
 
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3667.2861673827642!2d79.90438457531907!3d23.19623947905242!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDExJzQ2LjUiTiA3OcKwNTQnMjUuMSJF!5e0!3m2!1sen!2sin!4v1770535810807!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3667.3635069438515!2d79.9157984!3d23.193419599999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3981b1d3ae8eefcd%3A0x5765c228b8a26b1d!2sD&#39;casa%20The%20Pub!5e0!3m2!1sen!2sin!4v1779303237086!5m2!1sen!2sin"
               width="100%"
               height="100%"
               loading="lazy"

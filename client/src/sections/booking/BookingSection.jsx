@@ -175,53 +175,111 @@ const BookingSection = () => {
               />
 
               {/* Select */}
-              <select
-                name="tableType"
-                value={formData.tableType}
-                onChange={handleChange}
-                className="
-                w-full
-                bg-black/40
-                border
-                border-white/10
-                rounded-2xl
-                px-5
-                py-4
-                text-white
-                outline-none
-                focus:border-pink-500
-                transition
-                "
-              >
-                <option value="">Select Table Type</option>
-                <option value="Regular">Regular</option>
-                <option value="VIP">VIP</option>
-                <option value="Premium Lounge">Premium Lounge</option>
-              </select>
+              <div className="relative w-full group">
+                <select
+                  name="tableType"
+                  value={formData.tableType}
+                  onChange={handleChange}
+                  className="
+      w-full
+      appearance-none
+      rounded-2xl
+      border border-white/10
+      bg-black/40
+      backdrop-blur-xl
+      px-5
+      py-4
+      pr-14
+      text-white
+      outline-none
+      transition-all
+      duration-300
 
+      hover:border-pink-500/50
+      hover:shadow-[0_0_18px_rgba(236,72,153,0.18)]
+
+      focus:border-pink-500
+      focus:shadow-[0_0_28px_rgba(236,72,153,0.35)]
+    "
+                >
+                  <option value="" className="bg-[#0a0a0f] text-white/80">
+                    Select Table Type
+                  </option>
+
+                  <option value="Regular" className="bg-[#0a0a0f] text-white">
+                    Regular
+                  </option>
+
+                  <option value="VIP" className="bg-[#0a0a0f] text-pink-400">
+                    VIP
+                  </option>
+
+                  <option
+                    value="Premium Lounge"
+                    className="bg-[#0a0a0f] text-cyan-300"
+                  >
+                    Premium Lounge
+                  </option>
+                </select>
+
+                {/* Neon Arrow */}
+                <div
+                  className="
+      pointer-events-none
+      absolute
+      right-5
+      top-1/2
+      -translate-y-1/2
+      text-pink-100
+      transition-all
+      duration-300
+      drop-shadow-[0_0_10px_rgba(236,72,153,0.9)]
+      group-hover:scale-110
+    "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.2}
+                    stroke="currentColor"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Submit Button */}
               {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
                 className="
-  w-full
-  relative
-  overflow-hidden
-  rounded-2xl
-  bg-gradient-to-r
-  from-pink-500
-  via-purple-500
-  to-cyan-500
-  py-4
-  font-semibold
-  uppercase
-  tracking-[0.15em]
-  text-white
-  transition-all
-  duration-300
-  hover:scale-[1.02]
-  disabled:opacity-50
-  disabled:cursor-not-allowed
+    w-full
+    group
+    relative
+    overflow-hidden
+    rounded-2xl
+    bg-gradient-to-r
+    from-pink-500
+    via-purple-500
+    to-cyan-500
+    py-4
+    font-semibold
+    uppercase
+    tracking-[0.15em]
+    text-white
+    transition-all
+    duration-300
+    hover:scale-[1.03]
+    shadow-[0_10px_40px_rgba(236,72,153,0.35)]
+    disabled:opacity-50
+    disabled:cursor-not-allowed
   "
               >
                 <span className="relative z-10 flex items-center justify-center gap-3">
@@ -234,7 +292,20 @@ const BookingSection = () => {
                     : "Confirm VIP Reservation"}
                 </span>
 
-                <div className="absolute inset-0 opacity-0 hover:opacity-100 bg-white/10 transition duration-500" />
+                {/* Smooth neon hover slide effect (same as navbar button) */}
+                <div
+                  className="
+      absolute
+      inset-0
+      translate-y-full
+      bg-white/10
+      transition-all
+      duration-500
+      group-hover:translate-y-0
+    "
+                />
+
+                {/* extra glow layer */}
               </button>
             </div>
           </motion.form>

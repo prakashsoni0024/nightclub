@@ -21,13 +21,27 @@ const Navbar = () => {
       {/* Glassmorphism Navbar */}
       <div className="mx-auto max-w-7xl px-4 md:px-8 pt-4">
         <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/3 backdrop-blur-xl px-6 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
-          
           {/* Logo */}
           <Link
             href="/"
-            className="text-2xl md:text-3xl font-black tracking-[0.25em] bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent"
+            className="
+    font-[family:var(--font-great-vibes)]
+    text-3xl md:text-4xl
+    leading-none
+    whitespace-nowrap
+    bg-gradient-to-r
+    from-pink-500
+    via-purple-400
+    to-cyan-400
+    bg-clip-text
+    text-transparent
+    drop-shadow-[0_0_14px_rgba(192,132,252,0.35)]
+    transition-all
+    duration-300
+    hover:scale-105
+  "
           >
-            NOIR
+            D'Casa
           </Link>
 
           {/* Desktop Menu */}
@@ -53,7 +67,6 @@ const Navbar = () => {
 
           {/* Right Section */}
           <div className="flex items-center gap-4">
-
             {/* CTA Button */}
             <Link
               href="/booking"

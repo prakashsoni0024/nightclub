@@ -32,12 +32,10 @@ import {
 export default function AdminPage() {
   const router = useRouter();
 
+  const [activeSection, setActiveSection] = useState("Dashboard");
   const [eventLoading, setEventLoading] = useState(false);
-
   const [galleryLoading, setGalleryLoading] = useState(false);
-
   const [deleteLoading, setDeleteLoading] = useState(null);
-
   const [galleryDeleteLoading, setGalleryDeleteLoading] = useState(null);
 
   const [bookings, setBookings] = useState([]);
@@ -45,12 +43,9 @@ export default function AdminPage() {
   const [gallery, setGallery] = useState([]);
 
   const [loading, setLoading] = useState(true);
-
   const [imageFile, setImageFile] = useState(null);
-
   const [galleryFile, setGalleryFile] = useState(null);
   const [galleryLabel, setGalleryLabel] = useState("");
-
   const [eventForm, setEventForm] = useState({
     title: "",
     image: "",
@@ -213,6 +208,26 @@ export default function AdminPage() {
     }
   };
 
+  const handleSidebarClick = (label) => {
+    setActiveSection(label);
+
+    const section = document.getElementById(label);
+
+    if (section) {
+      const navbarOffset = 100; // navbar height
+
+      const sectionPosition =
+        section.getBoundingClientRect().top + window.pageYOffset;
+
+      const offsetPosition = sectionPosition - navbarOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white/95 overflow-hidden relative">
       <Toaster
@@ -238,7 +253,7 @@ export default function AdminPage() {
         <aside className="w-[270px] min-h-screen border-r border-white/10 bg-white/[0.03] backdrop-blur-2xl p-6 hidden lg:flex flex-col justify-between">
           <div>
             <h1 className="text-3xl font-black uppercase tracking-[0.2em] bg-gradient-to-r from-pink-500 to-cyan-400 bg-clip-text text-transparent">
-              NOIR
+              D'Casa
             </h1>
 
             <div className="mt-14 space-y-3">
@@ -262,17 +277,21 @@ export default function AdminPage() {
               ].map((item, i) => (
                 <button
                   key={i}
-                  className="
-                  flex items-center gap-4
-                  w-full
-                  px-5 py-4
-                  rounded-2xl
-                  bg-white/[0.03]
-                  border border-white/10
-                  hover:border-pink-500/40
-                  hover:bg-pink-500/10
-                  transition-all duration-300
-                  "
+                  onClick={() => handleSidebarClick(item.label)}
+                  className={`
+      flex items-center gap-4
+      w-full
+      px-5 py-4
+      rounded-2xl
+      border
+      transition-all duration-300
+      
+      ${
+        activeSection === item.label
+          ? "bg-gradient-to-r from-pink-500/30 to-cyan-500/20 border-pink-500/50 shadow-[0_0_30px_rgba(236,72,153,0.2)]"
+          : "bg-white/[0.03] border-white/10 hover:border-pink-500/40 hover:bg-pink-500/10"
+      }
+      `}
                 >
                   <item.icon size={20} />
                   <span className="tracking-wide">{item.label}</span>
@@ -302,22 +321,48 @@ export default function AdminPage() {
         {/* Main Content */}
         <main className="flex-1 p-6 lg:p-10">
           {/* Topbar */}
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 lg:mb-10">
             <div>
-              <p className="uppercase tracking-[0.3em] text-pink-400 text-sm mb-3">
+              <p
+                className="
+      uppercase
+      tracking-[0.2em] sm:tracking-[0.3em]
+      text-pink-400
+      text-xs sm:text-sm
+      mb-2
+      "
+              >
                 Nightclub Admin
               </p>
 
-              <h1 className="text-5xl font-black uppercase leading-none">
+              <h1
+                className="
+      text-3xl
+      sm:text-4xl
+      lg:text-5xl
+      font-black
+      uppercase
+      leading-tight
+      break-words
+      "
+              >
                 Dashboard
               </h1>
             </div>
-
-          
           </div>
 
           {/* Stats Cards */}
-          <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mb-14">
+          <div
+            id="Dashboard"
+            className="
+  grid
+  grid-cols-1
+  sm:grid-cols-2
+  xl:grid-cols-4
+  gap-4 sm:gap-6
+  mb-10 lg:mb-14
+  "
+          >
             {[
               {
                 title: "Bookings",
@@ -349,26 +394,56 @@ export default function AdminPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 className="
-                p-6 rounded-[30px]
-                border border-white/10
-                bg-white/[0.04]
-                backdrop-blur-xl
-                hover:border-pink-500/30
-                hover:shadow-[0_0_40px_rgba(236,72,153,0.2)]
-                transition-all duration-300
-                "
+      p-4 sm:p-6
+      rounded-[24px] sm:rounded-[30px]
+      border border-white/10
+      bg-white/[0.04]
+      backdrop-blur-xl
+      hover:border-pink-500/30
+      hover:shadow-[0_0_40px_rgba(236,72,153,0.2)]
+      transition-all duration-300
+      "
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-400 text-sm uppercase tracking-[0.2em]">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <p
+                      className="
+            text-gray-400
+            text-xs sm:text-sm
+            uppercase
+            tracking-[0.15em] sm:tracking-[0.2em]
+            "
+                    >
                       {item.title}
                     </p>
 
-                    <h2 className="text-5xl font-black mt-4">{item.value}</h2>
+                    <h2
+                      className="
+            text-3xl
+            sm:text-4xl
+            lg:text-5xl
+            font-black
+            mt-3 sm:mt-4
+            break-words
+            "
+                    >
+                      {item.value}
+                    </h2>
                   </div>
 
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/20 to-cyan-500/20 flex items-center justify-center">
-                    <item.icon size={28} />
+                  <div
+                    className="
+          w-12 h-12
+          sm:w-16 sm:h-16
+          rounded-2xl
+          bg-gradient-to-br
+          from-pink-500/20
+          to-cyan-500/20
+          flex items-center justify-center
+          shrink-0
+          "
+                  >
+                    <item.icon size={24} className="sm:w-7 sm:h-7" />
                   </div>
                 </div>
               </motion.div>
@@ -376,22 +451,49 @@ export default function AdminPage() {
           </div>
 
           {/* Bookings */}
-          <div className="mb-20">
-            <div className="flex items-center gap-3 mb-8">
-              <Wallet className="text-pink-500" />
-              <h2 className="text-3xl font-black uppercase">Recent Bookings</h2>
+          <div id="Bookings" className="mb-14 lg:mb-20">
+            <div className="flex items-center gap-3 mb-6 lg:mb-8">
+              <Wallet className="text-pink-500 w-5 h-5 sm:w-6 sm:h-6" />
+
+              <h2
+                className="
+      text-2xl
+      sm:text-3xl
+      font-black
+      uppercase
+      leading-tight
+      "
+              >
+                Recent Bookings
+              </h2>
             </div>
 
-            <div className="overflow-x-auto rounded-[30px] border border-white/10 bg-white/[0.03] backdrop-blur-xl">
-              <table className="w-full">
+            <div
+              className="
+    overflow-x-auto
+    rounded-[24px] sm:rounded-[30px]
+    border border-white/10
+    bg-white/[0.03]
+    backdrop-blur-xl
+    "
+            >
+              <table className="w-full min-w-[750px]">
                 <thead>
-                  <tr className="border-b border-white/10 text-gray-400 uppercase text-sm tracking-[0.2em]">
-                    <th className="p-5 text-left">Name</th>
-                    <th className="p-5 text-left">Phone</th>
-                    <th className="p-5 text-left">Guests</th>
-                    <th className="p-5 text-left">Date</th>
-                    <th className="p-5 text-left">Table</th>
-                    <th className="p-5 text-left">Actions</th>
+                  <tr
+                    className="
+          border-b border-white/10
+          text-gray-400
+          uppercase
+          text-xs sm:text-sm
+          tracking-[0.15em] sm:tracking-[0.2em]
+          "
+                  >
+                    <th className="p-4 sm:p-5 text-left">Name</th>
+                    <th className="p-4 sm:p-5 text-left">Phone</th>
+                    <th className="p-4 sm:p-5 text-left">Guests</th>
+                    <th className="p-4 sm:p-5 text-left">Date</th>
+                    <th className="p-4 sm:p-5 text-left">Table</th>
+                    <th className="p-4 sm:p-5 text-left">Actions</th>
                   </tr>
                 </thead>
 
@@ -399,18 +501,47 @@ export default function AdminPage() {
                   {bookings.map((b) => (
                     <tr
                       key={b._id}
-                      className="border-b border-white/5 hover:bg-white/[0.03] transition"
+                      className="
+            border-b border-white/5
+            hover:bg-white/[0.03]
+            transition
+            "
                     >
-                      <td className="p-5">{b.name}</td>
-                      <td className="p-5">{b.phone}</td>
-                      <td className="p-5">{b.guests}</td>
-                      <td className="p-5">{b.bookingDate}</td>
-                      <td className="p-5">{b.tableType}</td>
-                      <td className="p-5">
+                      <td className="p-4 sm:p-5 text-sm sm:text-base whitespace-nowrap">
+                        {b.name}
+                      </td>
+
+                      <td className="p-4 sm:p-5 text-sm sm:text-base whitespace-nowrap">
+                        {b.phone}
+                      </td>
+
+                      <td className="p-4 sm:p-5 text-sm sm:text-base">
+                        {b.guests}
+                      </td>
+
+                      <td className="p-4 sm:p-5 text-sm sm:text-base whitespace-nowrap">
+                        {b.bookingDate}
+                      </td>
+
+                      <td className="p-4 sm:p-5 text-sm sm:text-base whitespace-nowrap">
+                        {b.tableType}
+                      </td>
+
+                      <td className="p-4 sm:p-5">
                         <button
                           onClick={() => handleDeleteBooking(b._id)}
-                          className=" bg-red-500/20
-                      border border-red-500/20 hover:bg-red-600 transition px-4 py-1 rounded-lg"
+                          className="
+                bg-red-500/20
+                border border-red-500/20
+                hover:bg-red-600
+                transition
+                px-3 sm:px-4
+                py-1.5 sm:py-2
+                rounded-lg
+                text-sm
+                font-medium
+                whitespace-nowrap
+                "
                         >
                           Delete
                         </button>
@@ -423,17 +554,54 @@ export default function AdminPage() {
           </div>
 
           {/* Create Event */}
-          <div className="grid lg:grid-cols-2 gap-10 mb-20">
-            <div className="p-8 rounded-[30px] border border-white/10 bg-white/[0.03] backdrop-blur-xl">
-              <h2 className="text-3xl font-black uppercase mb-8">
+          <div
+            id="Events"
+            className="
+  grid
+  grid-cols-1
+  lg:grid-cols-2
+  gap-6 lg:gap-10
+  mb-14 lg:mb-20
+  "
+          >
+            {/* Create Event Form */}
+            <div
+              className="
+    p-5 sm:p-8
+    rounded-[24px] sm:rounded-[30px]
+    border border-white/10
+    bg-white/[0.03]
+    backdrop-blur-xl
+    "
+            >
+              <h2
+                className="
+      text-2xl
+      sm:text-3xl
+      font-black
+      uppercase
+      mb-6 sm:mb-8
+      "
+              >
                 Create Event
               </h2>
 
-              <form onSubmit={handleEventSubmit} className="space-y-5">
+              <form
+                onSubmit={handleEventSubmit}
+                className="space-y-4 sm:space-y-5"
+              >
                 <input
                   placeholder="Event Title"
                   value={eventForm.title}
-                  className="w-full p-4 rounded-2xl bg-black border border-white/10 outline-none"
+                  className="
+        w-full
+        p-3 sm:p-4
+        rounded-2xl
+        bg-black
+        border border-white/10
+        outline-none
+        text-sm sm:text-base
+        "
                   onChange={(e) =>
                     setEventForm({
                       ...eventForm,
@@ -444,14 +612,28 @@ export default function AdminPage() {
 
                 <input
                   type="file"
-                  className="w-full p-4 rounded-2xl bg-black border border-white/10"
+                  className="
+        w-full
+        p-3 sm:p-4
+        rounded-2xl
+        bg-black
+        border border-white/10
+        text-sm sm:text-base
+        "
                   onChange={(e) => setImageFile(e.target.files[0])}
                 />
 
                 <input
                   type="date"
                   value={eventForm.date}
-                  className="w-full p-4 rounded-2xl bg-black border border-white/10"
+                  className="
+        w-full
+        p-3 sm:p-4
+        rounded-2xl
+        bg-black
+        border border-white/10
+        text-sm sm:text-base
+        "
                   onChange={(e) =>
                     setEventForm({
                       ...eventForm,
@@ -463,7 +645,15 @@ export default function AdminPage() {
                 <input
                   placeholder="Ticket Price"
                   value={eventForm.price}
-                  className="w-full p-4 rounded-2xl bg-black border border-white/10"
+                  className="
+        w-full
+        p-3 sm:p-4
+        rounded-2xl
+        bg-black
+        border border-white/10
+        outline-none
+        text-sm sm:text-base
+        "
                   onChange={(e) =>
                     setEventForm({
                       ...eventForm,
@@ -475,7 +665,17 @@ export default function AdminPage() {
                 <textarea
                   placeholder="Description"
                   value={eventForm.description}
-                  className="w-full p-4 rounded-2xl bg-black border border-white/10 h-32"
+                  className="
+        w-full
+        p-3 sm:p-4
+        rounded-2xl
+        bg-black
+        border border-white/10
+        h-28 sm:h-32
+        outline-none
+        text-sm sm:text-base
+        resize-none
+        "
                   onChange={(e) =>
                     setEventForm({
                       ...eventForm,
@@ -487,16 +687,20 @@ export default function AdminPage() {
                 <button
                   disabled={eventLoading}
                   className="
-  w-full
-  py-4
-  rounded-2xl
-  bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400
-  text-black/90
-  font-bold
-  hover:scale-[1.02]
-  transition-all duration-300
-  disabled:opacity-50
-  "
+        w-full
+        py-3 sm:py-4
+        rounded-2xl
+        bg-gradient-to-r
+        from-pink-500
+        via-purple-500
+        to-cyan-400
+        text-black/90
+        font-bold
+        text-sm sm:text-base
+        hover:scale-[1.02]
+        transition-all duration-300
+        disabled:opacity-50
+        "
                 >
                   {eventLoading ? "Creating Event..." : "Create Event"}
                 </button>
@@ -504,36 +708,68 @@ export default function AdminPage() {
             </div>
 
             {/* Events List */}
-            <div className="p-8 rounded-[30px] border border-white/10 bg-white/[0.03] backdrop-blur-xl">
-              <h2 className="text-3xl font-black uppercase mb-8">Events</h2>
+            <div
+              className="
+    p-5 sm:p-8
+    rounded-[24px] sm:rounded-[30px]
+    border border-white/10
+    bg-white/[0.03]
+    backdrop-blur-xl
+    "
+            >
+              <h2
+                className="
+      text-2xl
+      sm:text-3xl
+      font-black
+      uppercase
+      mb-6 sm:mb-8
+      "
+              >
+                Events
+              </h2>
 
               <div className="space-y-4">
                 {events.map((e) => (
                   <div
                     key={e._id}
                     className="
-                    flex items-center justify-between
-                    p-5 rounded-2xl
-                    border border-white/10
-                    bg-black/40
-                    "
+          flex items-center justify-between gap-4
+          p-4 sm:p-5
+          rounded-2xl
+          border border-white/10
+          bg-black/40
+          "
                   >
-                    <div>
-                      <p className="font-semibold">{e.title}</p>
+                    <div className="min-w-0">
+                      <p
+                        className="
+              font-semibold
+              text-sm sm:text-base
+              truncate
+              "
+                      >
+                        {e.title}
+                      </p>
 
-                      <p className="text-gray-500 text-sm mt-1">{e.date}</p>
+                      <p className="text-gray-500 text-xs sm:text-sm mt-1">
+                        {e.date}
+                      </p>
                     </div>
 
                     <button
                       onClick={() => handleDeleteEvent(e._id)}
                       className="
-                      w-12 h-12 rounded-xl
-                      bg-red-500/20
-                      border border-red-500/20
-                      flex items-center justify-center
-                      hover:bg-red-500
-                      transition-all
-                      "
+            w-10 h-10
+            sm:w-12 sm:h-12
+            rounded-xl
+            bg-red-500/20
+            border border-red-500/20
+            flex items-center justify-center
+            hover:bg-red-500
+            transition-all
+            shrink-0
+            "
                     >
                       {deleteLoading === e._id ? "..." : <Trash2 size={18} />}
                     </button>
@@ -544,74 +780,145 @@ export default function AdminPage() {
           </div>
 
           {/* Gallery */}
-          <div className="p-8 rounded-[30px] border border-white/10 bg-white/[0.03] backdrop-blur-xl">
-            <h2 className="text-3xl font-black uppercase mb-8">
+          <div
+            id="Gallery"
+            className="
+  p-5 sm:p-8
+  rounded-[24px] sm:rounded-[30px]
+  border border-white/10
+  bg-white/[0.03]
+  backdrop-blur-xl
+  "
+          >
+            <h2
+              className="
+    text-2xl
+    sm:text-3xl
+    font-black
+    uppercase
+    mb-6 sm:mb-8
+    "
+            >
               Gallery Upload
             </h2>
 
-            <div className="grid lg:grid-cols-3 gap-4 mb-8">
+            {/* Upload Controls */}
+            <div
+              className="
+    grid
+    grid-cols-1
+    lg:grid-cols-3
+    gap-4
+    mb-6 sm:mb-8
+    "
+            >
               <input
                 type="text"
                 placeholder="Image Label"
                 value={galleryLabel}
                 onChange={(e) => setGalleryLabel(e.target.value)}
-                className="p-4 rounded-2xl bg-black border border-white/10"
+                className="
+      p-3 sm:p-4
+      rounded-2xl
+      bg-black
+      border border-white/10
+      text-sm sm:text-base
+      outline-none
+      "
               />
 
               <input
                 type="file"
                 onChange={(e) => setGalleryFile(e.target.files[0])}
-                className="p-4 rounded-2xl bg-black border border-white/10"
+                className="
+      p-3 sm:p-4
+      rounded-2xl
+      bg-black
+      border border-white/10
+      text-sm sm:text-base
+      "
               />
 
               <button
                 onClick={handleGalleryUpload}
                 disabled={galleryLoading}
                 className="
-  rounded-2xl
-  bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400
-  text-black/90
-  font-bold
-  disabled:opacity-50
-  "
+      py-3 sm:py-4
+      rounded-2xl
+      bg-gradient-to-r
+      from-pink-500
+      via-purple-500
+      to-cyan-400
+      text-black/90
+      font-bold
+      text-sm sm:text-base
+      disabled:opacity-50
+      hover:scale-[1.02]
+      transition-all duration-300
+      "
               >
                 {galleryLoading ? "Uploading..." : "Upload"}
               </button>
             </div>
 
-            <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+            {/* Gallery Grid */}
+            <div
+              className="
+    grid
+    grid-cols-1
+    sm:grid-cols-2
+    xl:grid-cols-4
+    gap-4 sm:gap-6
+    "
+            >
               {gallery.map((img) => (
                 <motion.div
                   whileHover={{ scale: 1.03 }}
                   key={img._id}
                   className="
-                  relative overflow-hidden
-                  rounded-[24px]
-                  border border-white/10
-                  "
+        relative overflow-hidden
+        rounded-[20px] sm:rounded-[24px]
+        border border-white/10
+        "
                 >
                   <img
                     src={img.imageUrl}
                     alt=""
-                    className="w-full h-[300px] object-cover"
+                    className="
+          w-full
+          h-[240px] sm:h-[300px]
+          object-cover
+          "
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
-                  <div className="absolute bottom-4 left-4 text-xs tracking-[0.3em] uppercase text-purple-200">
-                    <p className="font-semibold">{img.label}</p>
+                  <div
+                    className="
+          absolute bottom-4 left-4
+          text-[10px] sm:text-xs
+          tracking-[0.2em] sm:tracking-[0.3em]
+          uppercase
+          text-purple-200
+          pr-10
+          "
+                  >
+                    <p className="font-semibold break-words">{img.label}</p>
                   </div>
 
                   <button
                     onClick={() => handleDeleteImage(img._id)}
                     className="
-                    absolute top-4 right-4
-                    w-7 h-7
-                    rounded-xl
-                    bg-red-500/60
-                      border border-red-500/20 hover:bg-red-600
-                    flex items-center justify-center
-                    "
+          absolute top-3 right-3
+          w-8 h-8
+          sm:w-9 sm:h-9
+          rounded-xl
+          bg-red-500/60
+          border border-red-500/20
+          hover:bg-red-600
+          flex items-center justify-center
+          transition-all
+          "
                   >
                     {galleryDeleteLoading === img._id ? (
                       "..."

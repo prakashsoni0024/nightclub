@@ -71,7 +71,7 @@ export default function AdminLogin() {
           className="text-center"
         >
           <h1 className="text-7xl font-black uppercase tracking-[0.2em] bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-            NOIR
+            D'Casa
           </h1>
 
           <p className="text-gray-400 mt-6 tracking-[0.3em] uppercase text-sm">

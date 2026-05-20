@@ -16,7 +16,7 @@ const Footer = () => {
           {/* Brand (same vibe as navbar logo) */}
           <div>
             <h2 className="text-2xl font-bold tracking-widest text-pink-500">
-              NOIR
+              D'Casa
             </h2>
 
             <p className="text-gray-400 mt-4 max-w-sm text-sm leading-relaxed">
@@ -52,10 +52,17 @@ const Footer = () => {
             </span>
 
             <div className="flex gap-4 text-lg text-gray-400">
-              <FaInstagram className="hover:text-pink-500 transition cursor-pointer" />
-              <FaFacebook className="hover:text-pink-500 transition cursor-pointer" />
-              <FaXTwitter className="hover:text-pink-500 transition cursor-pointer" />
+              <Link href="https://www.instagram.com/dcasapub/" target="_blank" rel="noopener noreferrer">
+                <FaInstagram className="hover:text-pink-500 transition cursor-pointer" />
+              </Link>
+              <Link href="https://www.facebook.com/dcasapub" target="_blank" rel="noopener noreferrer">
+                <FaFacebook className="hover:text-pink-500 transition cursor-pointer" />
+              </Link>
+              <Link href="https://www.twitter.com/dcasapub" target="_blank" rel="noopener noreferrer">
+                <FaXTwitter className="hover:text-pink-500 transition cursor-pointer" />
+              </Link>
             </div>
+             
           </div>
         </div>
 
@@ -68,7 +75,7 @@ const Footer = () => {
           <p>
             © {new Date().getFullYear()}{" "}
             <span className="text-pink-500 font-semibold tracking-widest">
-              NOIR
+              D'Casa
             </span>
           </p>
 
