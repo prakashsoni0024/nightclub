@@ -17,7 +17,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://nightclub-9u85.vercel.app/",
+    origin: [
+      "http://localhost:3000",
+      "https://nightclub-9u85.vercel.app/",
+    ],
     credentials: true,
   })
 );
