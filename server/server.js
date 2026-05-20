@@ -21,6 +21,7 @@ app.use(
       "http://localhost:3000",
       "https://nightclub-9u85.vercel.app",
     ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
