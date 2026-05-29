@@ -1,39 +1,41 @@
+import API from "./api";
+
 export const createOrder = async (amount) => {
-
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/payment/create-order`,
-    {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({
+  try {
+    const { data } = await API.post(
+      "/payment/create-order",
+      {
         amount,
-      }),
-    }
-  );
+      }
+    );
 
-  return response.json();
+    return data;
+
+  } catch (error) {
+    console.error("Create Order Error:", error);
+
+    return {
+      success: false,
+      message: error.response?.data?.message || "Failed to create order",
+    };
+  }
 };
 
+export const verifyPayment = async (paymentData) => {
+  try {
+    const { data } = await API.post(
+      "/payment/verify-payment",
+      paymentData
+    );
 
+    return data;
 
-export const verifyPayment = async (data) => {
+  } catch (error) {
+    console.error("Verify Payment Error:", error);
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/payment/verify-payment`,
-    {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify(data),
-    }
-  );
-
-  return response.json();
+    return {
+      success: false,
+      message: error.response?.data?.message || "Payment verification failed",
+    };
+  }
 };
