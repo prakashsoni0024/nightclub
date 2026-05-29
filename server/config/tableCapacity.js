@@ -1,0 +1,5 @@
+export const TABLE_CAPACITY = {
+  REGULAR: 30,
+  VIP: 10,
+  PREMIUM_LOUNGE: 5,
+};

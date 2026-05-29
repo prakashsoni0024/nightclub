@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
+import { Menu, X } from "lucide-react";
 
 import {
   Calendar,
@@ -17,9 +18,17 @@ import {
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
+import { verifyAdmin } from "@/services/authService";
 
-import { getBookings, deleteBooking } from "@/services/adminService";
+import {
+  getBookings,
+  deleteBooking,
+  getAvailabilityStats,
+} from "@/services/adminService";
 import { createEvent, deleteEvent, getEvents } from "@/services/eventService";
+import EventsSection from "@/components/admin/EventsSection";
+import GallerySection from "@/components/admin/GallerySection";
+import BookingsSection from "@/components/admin/BookingsSection";
 
 import { uploadImage } from "@/services/uploadService";
 
@@ -37,10 +46,17 @@ export default function AdminPage() {
   const [galleryLoading, setGalleryLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(null);
   const [galleryDeleteLoading, setGalleryDeleteLoading] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [bookings, setBookings] = useState([]);
   const [events, setEvents] = useState([]);
   const [gallery, setGallery] = useState([]);
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [tableFilter, setTableFilter] = useState("");
+
+  const [dateFilter, setDateFilter] = useState("");
 
   const [loading, setLoading] = useState(true);
   const [imageFile, setImageFile] = useState(null);
@@ -54,18 +70,53 @@ export default function AdminPage() {
     description: "",
   });
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  const [availability, setAvailability] = useState({
+    REGULAR: 0,
+    VIP: 0,
+    PREMIUM_LOUNGE: 0,
+  });
 
-    if (!token) {
-      router.push("/admin/login");
+  const fetchAvailability = async () => {
+    try {
+      const data = await getAvailabilityStats();
+
+      setAvailability(data.availability);
+    } catch (error) {
+      console.log(error);
     }
+  };
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          router.push("/admin/login");
+
+          return;
+        }
+
+        await verifyAdmin();
+      } catch (error) {
+        localStorage.removeItem("token");
+
+        router.push("/admin/login");
+      }
+    };
+
+    checkAdmin();
   }, []);
 
   const fetchBookings = async () => {
     try {
       const data = await getBookings();
-      setBookings(data.bookings);
+
+      const sorted = data.bookings.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      );
+
+      setBookings(sorted);
     } catch (error) {
       console.log(error);
     } finally {
@@ -83,10 +134,31 @@ export default function AdminPage() {
     setGallery(data.images);
   };
 
+  const fetchAllData = async () => {
+    try {
+      setLoading(true);
+
+      await Promise.all([
+        fetchBookings(),
+        fetchEvents(),
+        fetchGallery(),
+        fetchAvailability(),
+      ]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetchBookings();
-    fetchEvents();
-    fetchGallery();
+    fetchAllData();
+
+    const interval = setInterval(() => {
+      fetchAllData();
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleLogout = () => {
@@ -228,6 +300,42 @@ export default function AdminPage() {
     }
   };
 
+  const totalRevenue = bookings.reduce((acc, booking) => {
+    const prices = {
+      REGULAR: 3000,
+      VIP: 5000,
+      PREMIUM_LOUNGE: 10000,
+    };
+
+    return acc + (prices[booking.tableType] || 0);
+  }, 0);
+
+  const todayBookings = bookings.filter((booking) => {
+    const today = new Date().toISOString().split("T")[0];
+
+    return booking.bookingDate === today;
+  }).length;
+
+  const vipBookings = bookings.filter(
+    (booking) => booking.tableType === "VIP",
+  ).length;
+
+  const premiumBookings = bookings.filter(
+    (booking) => booking.tableType === "PREMIUM_LOUNGE",
+  ).length;
+
+  const filteredBookings = bookings.filter((booking) => {
+    const matchesSearch =
+      booking.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      booking.phone?.includes(searchTerm);
+
+    const matchesTable = tableFilter ? booking.tableType === tableFilter : true;
+
+    const matchesDate = dateFilter ? booking.bookingDate === dateFilter : true;
+
+    return matchesSearch && matchesTable && matchesDate;
+  });
+
   return (
     <div className="min-h-screen bg-black text-white/95 overflow-hidden relative">
       <Toaster
@@ -249,12 +357,63 @@ export default function AdminPage() {
       <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff22_1px,transparent_1px),linear-gradient(to_bottom,#ffffff22_1px,transparent_1px)] bg-[size:90px_90px]" />
 
       <div className="relative z-10 flex">
+        {/* Mobile Overlay */}
+        {sidebarOpen && (
+          <div
+            className="
+      fixed inset-0
+      bg-black/70
+      backdrop-blur-sm
+      z-40
+      lg:hidden
+    "
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
         {/* Sidebar */}
-        <aside className="w-[270px] min-h-screen border-r border-white/10 bg-white/[0.03] backdrop-blur-2xl p-6 hidden lg:flex flex-col justify-between">
+        <aside
+          className={`
+    fixed lg:sticky
+    top-0 left-0
+    z-50
+    h-screen
+    w-[280px]
+    border-r border-white/10
+    bg-[#070707]/95
+    backdrop-blur-2xl
+    p-6
+    flex flex-col justify-between
+    transition-all duration-300
+
+    ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+  `}
+        >
           <div>
-            <h1 className="text-3xl font-black uppercase tracking-[0.2em] bg-gradient-to-r from-pink-500 to-cyan-400 bg-clip-text text-transparent">
-              D'Casa
-            </h1>
+            <div className="flex items-center justify-between">
+              <h1
+                className="
+        text-3xl
+        font-black
+        uppercase
+        tracking-[0.2em]
+        bg-gradient-to-r
+        from-pink-500
+        to-cyan-400
+        bg-clip-text
+        text-transparent
+      "
+              >
+                D'Casa
+              </h1>
+
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="lg:hidden"
+              >
+                <X />
+              </button>
+            </div>
 
             <div className="mt-14 space-y-3">
               {[
@@ -262,14 +421,17 @@ export default function AdminPage() {
                   icon: LayoutDashboard,
                   label: "Dashboard",
                 },
+
                 {
                   icon: Ticket,
                   label: "Bookings",
                 },
+
                 {
                   icon: Calendar,
                   label: "Events",
                 },
+
                 {
                   icon: ImageIcon,
                   label: "Gallery",
@@ -277,23 +439,27 @@ export default function AdminPage() {
               ].map((item, i) => (
                 <button
                   key={i}
-                  onClick={() => handleSidebarClick(item.label)}
+                  onClick={() => {
+                    handleSidebarClick(item.label);
+                    setSidebarOpen(false);
+                  }}
                   className={`
-      flex items-center gap-4
-      w-full
-      px-5 py-4
-      rounded-2xl
-      border
-      transition-all duration-300
-      
-      ${
-        activeSection === item.label
-          ? "bg-gradient-to-r from-pink-500/30 to-cyan-500/20 border-pink-500/50 shadow-[0_0_30px_rgba(236,72,153,0.2)]"
-          : "bg-white/[0.03] border-white/10 hover:border-pink-500/40 hover:bg-pink-500/10"
-      }
-      `}
+            flex items-center gap-4
+            w-full
+            px-5 py-4
+            rounded-2xl
+            border
+            transition-all duration-300
+
+            ${
+              activeSection === item.label
+                ? "bg-gradient-to-r from-pink-500/30 to-cyan-500/20 border-pink-500/50 shadow-[0_0_30px_rgba(236,72,153,0.2)]"
+                : "bg-white/[0.03] border-white/10 hover:border-pink-500/40 hover:bg-pink-500/10"
+            }
+          `}
                 >
                   <item.icon size={20} />
+
                   <span className="tracking-wide">{item.label}</span>
                 </button>
               ))}
@@ -303,15 +469,14 @@ export default function AdminPage() {
           <button
             onClick={handleLogout}
             className="
-            flex items-center justify-center gap-3
-            w-full
-            py-4
-            rounded-2xl
-            bg-red-500/20
-            border border-red-500/20
-            hover:bg-red-500
-            transition-all duration-300
-            "
+      flex items-center justify-center gap-3
+      w-full py-4
+      rounded-2xl
+      bg-red-500/20
+      border border-red-500/20
+      hover:bg-red-500
+      transition-all duration-300
+    "
           >
             <LogOut size={18} />
             Logout
@@ -319,7 +484,30 @@ export default function AdminPage() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6 lg:p-10">
+        <main
+          className="
+    flex-1
+    min-w-0
+    p-4 sm:p-6 lg:p-10
+  "
+        >
+          {/* Mobile Topbar */}
+          <div className="flex items-center justify-between lg:hidden mb-6">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="
+      w-12 h-12
+      rounded-2xl
+      bg-white/[0.05]
+      border border-white/10
+      flex items-center justify-center
+    "
+            >
+              <Menu />
+            </button>
+
+            <h2 className="text-xl font-black tracking-widest">D'CASA</h2>
+          </div>
           {/* Topbar */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 lg:mb-10">
             <div>
@@ -355,12 +543,11 @@ export default function AdminPage() {
           <div
             id="Dashboard"
             className="
-  grid
-  grid-cols-1
-  sm:grid-cols-2
-  xl:grid-cols-4
-  gap-4 sm:gap-6
-  mb-10 lg:mb-14
+    grid
+    grid-cols-2
+    xl:grid-cols-4
+    gap-3 sm:gap-4
+    mb-10 lg:mb-12
   "
           >
             {[
@@ -369,18 +556,45 @@ export default function AdminPage() {
                 value: bookings.length,
                 icon: Ticket,
               },
+
+              {
+                title: "Revenue",
+                value: `₹${totalRevenue}`,
+                icon: Wallet,
+              },
+
+              {
+                title: "Today",
+                value: todayBookings,
+                icon: Calendar,
+              },
+
+              {
+                title: "VIP",
+                value: vipBookings,
+                icon: Users,
+              },
+
+              {
+                title: "Premium",
+                value: premiumBookings,
+                icon: Users,
+              },
+
               {
                 title: "Events",
                 value: events.length,
                 icon: Calendar,
               },
+
               {
                 title: "Gallery",
                 value: gallery.length,
                 icon: ImageIcon,
               },
+
               {
-                title: "Total Guests",
+                title: "Guests",
                 value: bookings.reduce(
                   (acc, item) => acc + Number(item.guests || 0),
                   0,
@@ -390,28 +604,45 @@ export default function AdminPage() {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
+                transition={{ delay: i * 0.05 }}
                 className="
-      p-4 sm:p-6
-      rounded-[24px] sm:rounded-[30px]
-      border border-white/10
-      bg-white/[0.04]
-      backdrop-blur-xl
-      hover:border-pink-500/30
-      hover:shadow-[0_0_40px_rgba(236,72,153,0.2)]
-      transition-all duration-300
+        group
+        relative
+        p-4 sm:p-5
+        rounded-[22px]
+        border border-white/10
+        bg-white/[0.03]
+        backdrop-blur-xl
+        hover:border-pink-500/30
+        hover:bg-white/[0.05]
+        transition-all duration-300
+        overflow-hidden
       "
               >
-                <div className="flex items-center justify-between gap-4">
+                {/* Glow */}
+                <div
+                  className="
+          absolute inset-0
+          opacity-0 group-hover:opacity-100
+          transition duration-500
+          bg-gradient-to-br
+          from-pink-500/10
+          via-transparent
+          to-cyan-500/10
+        "
+                />
+
+                <div className="relative z-10 flex items-center justify-between">
                   <div className="min-w-0">
                     <p
                       className="
-            text-gray-400
-            text-xs sm:text-sm
-            uppercase
-            tracking-[0.15em] sm:tracking-[0.2em]
+              text-[10px]
+              sm:text-xs
+              uppercase
+              tracking-[0.18em]
+              text-gray-400
             "
                     >
                       {item.title}
@@ -419,12 +650,12 @@ export default function AdminPage() {
 
                     <h2
                       className="
-            text-3xl
-            sm:text-4xl
-            lg:text-5xl
-            font-black
-            mt-3 sm:mt-4
-            break-words
+              text-2xl
+              sm:text-3xl
+              font-black
+              mt-2
+              leading-none
+              break-words
             "
                     >
                       {item.value}
@@ -433,503 +664,253 @@ export default function AdminPage() {
 
                   <div
                     className="
-          w-12 h-12
-          sm:w-16 sm:h-16
-          rounded-2xl
-          bg-gradient-to-br
-          from-pink-500/20
-          to-cyan-500/20
-          flex items-center justify-center
-          shrink-0
+            w-11 h-11
+            sm:w-12 sm:h-12
+            rounded-2xl
+            bg-gradient-to-br
+            from-pink-500/15
+            to-cyan-500/15
+            border border-white/10
+            flex items-center justify-center
+            shrink-0
           "
                   >
-                    <item.icon size={24} className="sm:w-7 sm:h-7" />
+                    <item.icon size={20} />
                   </div>
                 </div>
               </motion.div>
             ))}
           </div>
 
-          {/* Bookings */}
-          <div id="Bookings" className="mb-14 lg:mb-20">
-            <div className="flex items-center gap-3 mb-6 lg:mb-8">
-              <Wallet className="text-pink-500 w-5 h-5 sm:w-6 sm:h-6" />
-
-              <h2
+          {/* Availability Stats */}
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <div
                 className="
-      text-2xl
-      sm:text-3xl
-      font-black
-      uppercase
-      leading-tight
-      "
-              >
-                Recent Bookings
-              </h2>
-            </div>
-
-            <div
-              className="
-    overflow-x-auto
-    rounded-[24px] sm:rounded-[30px]
-    border border-white/10
-    bg-white/[0.03]
-    backdrop-blur-xl
-    "
-            >
-              <table className="w-full min-w-[750px]">
-                <thead>
-                  <tr
-                    className="
-          border-b border-white/10
-          text-gray-400
-          uppercase
-          text-xs sm:text-sm
-          tracking-[0.15em] sm:tracking-[0.2em]
-          "
-                  >
-                    <th className="p-4 sm:p-5 text-left">Name</th>
-                    <th className="p-4 sm:p-5 text-left">Phone</th>
-                    <th className="p-4 sm:p-5 text-left">Guests</th>
-                    <th className="p-4 sm:p-5 text-left">Date</th>
-                    <th className="p-4 sm:p-5 text-left">Table</th>
-                    <th className="p-4 sm:p-5 text-left">Actions</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {bookings.map((b) => (
-                    <tr
-                      key={b._id}
-                      className="
-            border-b border-white/5
-            hover:bg-white/[0.03]
-            transition
-            "
-                    >
-                      <td className="p-4 sm:p-5 text-sm sm:text-base whitespace-nowrap">
-                        {b.name}
-                      </td>
-
-                      <td className="p-4 sm:p-5 text-sm sm:text-base whitespace-nowrap">
-                        {b.phone}
-                      </td>
-
-                      <td className="p-4 sm:p-5 text-sm sm:text-base">
-                        {b.guests}
-                      </td>
-
-                      <td className="p-4 sm:p-5 text-sm sm:text-base whitespace-nowrap">
-                        {b.bookingDate}
-                      </td>
-
-                      <td className="p-4 sm:p-5 text-sm sm:text-base whitespace-nowrap">
-                        {b.tableType}
-                      </td>
-
-                      <td className="p-4 sm:p-5">
-                        <button
-                          onClick={() => handleDeleteBooking(b._id)}
-                          className="
-                bg-red-500/20
-                border border-red-500/20
-                hover:bg-red-600
-                transition
-                px-3 sm:px-4
-                py-1.5 sm:py-2
-                rounded-lg
-                text-sm
-                font-medium
-                whitespace-nowrap
-                "
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Create Event */}
-          <div
-            id="Events"
-            className="
-  grid
-  grid-cols-1
-  lg:grid-cols-2
-  gap-6 lg:gap-10
-  mb-14 lg:mb-20
-  "
-          >
-            {/* Create Event Form */}
-            <div
-              className="
-    p-5 sm:p-8
-    rounded-[24px] sm:rounded-[30px]
-    border border-white/10
-    bg-white/[0.03]
-    backdrop-blur-xl
-    "
-            >
-              <h2
-                className="
-      text-2xl
-      sm:text-3xl
-      font-black
-      uppercase
-      mb-6 sm:mb-8
-      "
-              >
-                Create Event
-              </h2>
-
-              <form
-                onSubmit={handleEventSubmit}
-                className="space-y-4 sm:space-y-5"
-              >
-                <input
-                  placeholder="Event Title"
-                  value={eventForm.title}
-                  className="
-        w-full
-        p-3 sm:p-4
-        rounded-2xl
-        bg-black
-        border border-white/10
-        outline-none
-        text-sm sm:text-base
-        "
-                  onChange={(e) =>
-                    setEventForm({
-                      ...eventForm,
-                      title: e.target.value,
-                    })
-                  }
-                />
-
-                <input
-                  type="file"
-                  className="
-        w-full
-        p-3 sm:p-4
-        rounded-2xl
-        bg-black
-        border border-white/10
-        text-sm sm:text-base
-        "
-                  onChange={(e) => setImageFile(e.target.files[0])}
-                />
-
-                <input
-                  type="date"
-                  value={eventForm.date}
-                  className="
-        w-full
-        p-3 sm:p-4
-        rounded-2xl
-        bg-black
-        border border-white/10
-        text-sm sm:text-base
-        "
-                  onChange={(e) =>
-                    setEventForm({
-                      ...eventForm,
-                      date: e.target.value,
-                    })
-                  }
-                />
-
-                <input
-                  placeholder="Ticket Price"
-                  value={eventForm.price}
-                  className="
-        w-full
-        p-3 sm:p-4
-        rounded-2xl
-        bg-black
-        border border-white/10
-        outline-none
-        text-sm sm:text-base
-        "
-                  onChange={(e) =>
-                    setEventForm({
-                      ...eventForm,
-                      price: e.target.value,
-                    })
-                  }
-                />
-
-                <textarea
-                  placeholder="Description"
-                  value={eventForm.description}
-                  className="
-        w-full
-        p-3 sm:p-4
-        rounded-2xl
-        bg-black
-        border border-white/10
-        h-28 sm:h-32
-        outline-none
-        text-sm sm:text-base
-        resize-none
-        "
-                  onChange={(e) =>
-                    setEventForm({
-                      ...eventForm,
-                      description: e.target.value,
-                    })
-                  }
-                />
-
-                <button
-                  disabled={eventLoading}
-                  className="
-        w-full
-        py-3 sm:py-4
-        rounded-2xl
-        bg-gradient-to-r
+        w-2 h-10
+        rounded-full
+        bg-gradient-to-b
         from-pink-500
-        via-purple-500
         to-cyan-400
-        text-black/90
-        font-bold
-        text-sm sm:text-base
-        hover:scale-[1.02]
-        transition-all duration-300
-        disabled:opacity-50
+      "
+              />
+
+              <div>
+                <p
+                  className="
+          text-xs
+          uppercase
+          tracking-[0.3em]
+          text-pink-400
         "
                 >
-                  {eventLoading ? "Creating Event..." : "Create Event"}
-                </button>
-              </form>
-            </div>
+                  Live Status
+                </p>
 
-            {/* Events List */}
-            <div
-              className="
-    p-5 sm:p-8
-    rounded-[24px] sm:rounded-[30px]
-    border border-white/10
-    bg-white/[0.03]
-    backdrop-blur-xl
-    "
-            >
-              <h2
-                className="
-      text-2xl
-      sm:text-3xl
-      font-black
-      uppercase
-      mb-6 sm:mb-8
-      "
-              >
-                Events
-              </h2>
-
-              <div className="space-y-4">
-                {events.map((e) => (
-                  <div
-                    key={e._id}
-                    className="
-          flex items-center justify-between gap-4
-          p-4 sm:p-5
-          rounded-2xl
-          border border-white/10
-          bg-black/40
-          "
-                  >
-                    <div className="min-w-0">
-                      <p
-                        className="
-              font-semibold
-              text-sm sm:text-base
-              truncate
-              "
-                      >
-                        {e.title}
-                      </p>
-
-                      <p className="text-gray-500 text-xs sm:text-sm mt-1">
-                        {e.date}
-                      </p>
-                    </div>
-
-                    <button
-                      onClick={() => handleDeleteEvent(e._id)}
-                      className="
-            w-10 h-10
-            sm:w-12 sm:h-12
-            rounded-xl
-            bg-red-500/20
-            border border-red-500/20
-            flex items-center justify-center
-            hover:bg-red-500
-            transition-all
-            shrink-0
-            "
-                    >
-                      {deleteLoading === e._id ? "..." : <Trash2 size={18} />}
-                    </button>
-                  </div>
-                ))}
+                <h2
+                  className="
+          text-2xl
+          sm:text-3xl
+          font-black
+          text-white/95
+          uppercase
+        "
+                >
+                  Today's Availability
+                </h2>
               </div>
             </div>
-          </div>
 
-          {/* Gallery */}
-          <div
-            id="Gallery"
-            className="
-  p-5 sm:p-8
-  rounded-[24px] sm:rounded-[30px]
-  border border-white/10
-  bg-white/[0.03]
-  backdrop-blur-xl
-  "
-          >
-            <h2
-              className="
-    text-2xl
-    sm:text-3xl
-    font-black
-    uppercase
-    mb-6 sm:mb-8
-    "
-            >
-              Gallery Upload
-            </h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {[
+                {
+                  label: "REGULAR",
+                  value: availability.REGULAR,
+                },
 
-            {/* Upload Controls */}
-            <div
-              className="
-    grid
-    grid-cols-1
-    lg:grid-cols-3
-    gap-4
-    mb-6 sm:mb-8
-    "
-            >
-              <input
-                type="text"
-                placeholder="Image Label"
-                value={galleryLabel}
-                onChange={(e) => setGalleryLabel(e.target.value)}
-                className="
-      p-3 sm:p-4
-      rounded-2xl
-      bg-black
-      border border-white/10
-      text-sm sm:text-base
-      outline-none
-      "
-              />
+                {
+                  label: "VIP",
+                  value: availability.VIP,
+                },
 
-              <input
-                type="file"
-                onChange={(e) => setGalleryFile(e.target.files[0])}
-                className="
-      p-3 sm:p-4
-      rounded-2xl
-      bg-black
-      border border-white/10
-      text-sm sm:text-base
-      "
-              />
-
-              <button
-                onClick={handleGalleryUpload}
-                disabled={galleryLoading}
-                className="
-      py-3 sm:py-4
-      rounded-2xl
-      bg-gradient-to-r
-      from-pink-500
-      via-purple-500
-      to-cyan-400
-      text-black/90
-      font-bold
-      text-sm sm:text-base
-      disabled:opacity-50
-      hover:scale-[1.02]
-      transition-all duration-300
-      "
-              >
-                {galleryLoading ? "Uploading..." : "Upload"}
-              </button>
-            </div>
-
-            {/* Gallery Grid */}
-            <div
-              className="
-    grid
-    grid-cols-1
-    sm:grid-cols-2
-    xl:grid-cols-4
-    gap-4 sm:gap-6
-    "
-            >
-              {gallery.map((img) => (
-                <motion.div
-                  whileHover={{ scale: 1.03 }}
-                  key={img._id}
+                {
+                  label: "PREMIUM",
+                  value: availability.PREMIUM_LOUNGE,
+                },
+              ].map((table, i) => (
+                <div
+                  key={i}
                   className="
-        relative overflow-hidden
-        rounded-[20px] sm:rounded-[24px]
-        border border-white/10
+          p-6
+          rounded-[30px]
+          border border-white/10
+          bg-white/[0.04]
+          backdrop-blur-xl
         "
                 >
-                  <img
-                    src={img.imageUrl}
-                    alt=""
+                  <p
                     className="
-          w-full
-          h-[240px] sm:h-[300px]
-          object-cover
-          "
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-                  <div
-                    className="
-          absolute bottom-4 left-4
-          text-[10px] sm:text-xs
-          tracking-[0.2em] sm:tracking-[0.3em]
-          uppercase
-          text-purple-200
-          pr-10
+            text-gray-400
+            uppercase
+            tracking-[0.2em]
+            text-sm
           "
                   >
-                    <p className="font-semibold break-words">{img.label}</p>
-                  </div>
+                    {table.label} LEFT
+                  </p>
 
-                  <button
-                    onClick={() => handleDeleteImage(img._id)}
-                    className="
-          absolute top-3 right-3
-          w-8 h-8
-          sm:w-9 sm:h-9
-          rounded-xl
-          bg-red-500/60
-          border border-red-500/20
-          hover:bg-red-600
-          flex items-center justify-center
-          transition-all
-          "
+                  <h2
+                    className={`
+            text-5xl
+            font-black
+            mt-4
+
+            ${table.value <= 1 ? "text-red-500" : "text-white"}
+          `}
                   >
-                    {galleryDeleteLoading === img._id ? (
-                      "..."
-                    ) : (
-                      <Trash2 size={16} />
-                    )}
-                  </button>
-                </motion.div>
+                    {table.value}
+                  </h2>
+
+                  {table.value <= 0 && (
+                    <p className="text-red-500 mt-3">SOLD OUT</p>
+                  )}
+                </div>
               ))}
             </div>
           </div>
+
+          {/* Filters */}
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-6">
+              <div
+                className="
+        w-2 h-10
+        rounded-full
+        bg-gradient-to-b
+        from-cyan-400
+        to-pink-500
+      "
+              />
+
+              <div>
+                <p
+                  className="
+          text-xs
+          uppercase
+          tracking-[0.3em]
+          text-cyan-400
+        "
+                >
+                  Search & Sort
+                </p>
+
+                <h2
+                  className="
+          text-2xl
+          sm:text-3xl
+          font-black
+          text-white/95
+          uppercase
+        "
+                >
+                  Booking Filters
+                </h2>
+              </div>
+            </div>
+
+            <div
+              className="
+      grid
+      md:grid-cols-3
+      gap-4
+    "
+            >
+              {/* SEARCH */}
+              <input
+                type="text"
+                placeholder="Search name or phone"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="
+        p-4
+        rounded-2xl
+        bg-white/[0.04]
+        border border-white/10
+        outline-none
+        focus:border-pink-500
+      "
+              />
+
+              {/* TABLE FILTER */}
+              <select
+                value={tableFilter}
+                onChange={(e) => setTableFilter(e.target.value)}
+                className="
+        p-4
+        rounded-2xl
+        bg-black
+        border border-white/10
+        outline-none
+        focus:border-pink-500
+      "
+              >
+                <option value="">All Tables</option>
+
+                <option value="REGULAR">Regular</option>
+
+                <option value="VIP">VIP</option>
+
+                <option value="PREMIUM_LOUNGE">Premium Lounge</option>
+              </select>
+
+              {/* DATE FILTER */}
+              <input
+                type="date"
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="
+        p-4
+        rounded-2xl
+        bg-white/[0.04]
+        border border-white/10
+        outline-none
+        focus:border-pink-500
+      "
+              />
+            </div>
+          </div>
+
+          {/* Bookings */}
+          <BookingsSection
+            bookings={filteredBookings}
+            handleDeleteBooking={handleDeleteBooking}
+          />
+
+          {/* Events */}
+          <EventsSection
+            events={events}
+            eventForm={eventForm}
+            setEventForm={setEventForm}
+            imageFile={imageFile}
+            setImageFile={setImageFile}
+            handleEventSubmit={handleEventSubmit}
+            handleDeleteEvent={handleDeleteEvent}
+            deleteLoading={deleteLoading}
+            eventLoading={eventLoading}
+          />
+
+          {/* Gallery */}
+          <GallerySection
+            gallery={gallery}
+            galleryLabel={galleryLabel}
+            setGalleryLabel={setGalleryLabel}
+            galleryFile={galleryFile}
+            setGalleryFile={setGalleryFile}
+            handleGalleryUpload={handleGalleryUpload}
+            galleryLoading={galleryLoading}
+            handleDeleteImage={handleDeleteImage}
+            galleryDeleteLoading={galleryDeleteLoading}
+          />
         </main>
       </div>
     </div>

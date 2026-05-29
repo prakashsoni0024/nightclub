@@ -34,3 +34,32 @@ button {
 option {
   background: #111;
 }
+
+.glass-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+}
+
+.admin-input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  outline: none;
+  transition: .3s;
+}
+
+.admin-input:focus {
+  border-color: rgba(236,72,153,0.6);
+  box-shadow: 0 0 20px rgba(236,72,153,0.15);
+}
+
+.admin-btn {
+  transition: all .3s ease;
+}
+
+.admin-btn:hover {
+  transform: translateY(-2px);
+}
