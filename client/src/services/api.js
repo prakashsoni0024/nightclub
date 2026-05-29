@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://nightclub.onrender.com/api",
+  baseURL:"https://nightclub.onrender.com/api",
 });
 
 API.interceptors.request.use((req) => {
