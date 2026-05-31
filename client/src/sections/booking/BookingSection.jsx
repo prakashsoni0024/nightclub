@@ -438,7 +438,7 @@ const BookingSection = () => {
                             <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
 
                             <p className="text-green-300 text-sm font-medium tracking-wide">
-                              {availability.available} Premium Tables Available
+                              {availability.available} Tables Available
                             </p>
                           </div>
                         ) : (

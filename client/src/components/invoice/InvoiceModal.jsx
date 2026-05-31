@@ -122,7 +122,7 @@ const InvoiceModal = ({ isOpen, onClose, booking }) => {
     doc.text("This invoice confirms your booking payment.", 20, 277);
 
     // ===== DOWNLOAD =====
-    doc.save(`Invoice-${booking.bookingId}.pdf`);
+    doc.save(`DCasa_Invoice.pdf`);
   };
 
   return (
