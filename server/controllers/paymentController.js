@@ -168,6 +168,14 @@ export const verifyPayment = async (req, res) => {
       message: "Payment verified successfully",
       booking,
     });
+
+    promise.all([
+      sendOwnerBookingEmail(booking),
+      sendCustomerBookingEmail(booking),
+    ]).catch((emailError) => {
+      console.log("Email sending error:", emailError);
+    });
+    
   } catch (error) {
     console.log(error);
 

@@ -1,17 +1,20 @@
 import nodemailer from "nodemailer";
 
+
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.BREVO_USER,
+    pass: process.env.BREVO_SMTP_KEY,
   },
 });
 
 export const sendOwnerBookingEmail = async (booking) => {
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: process.env.BREVO_USER,
       to: process.env.OWNER_EMAIL,
       subject: "New Table Reservation",
       html: `
@@ -35,7 +38,7 @@ export const sendOwnerBookingEmail = async (booking) => {
 export const sendCustomerBookingEmail = async (booking) => {
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: process.env.BREVO_USER,
       to: booking.email,
       subject: "Table Reservation Confirmed 🎉",
       html: `
