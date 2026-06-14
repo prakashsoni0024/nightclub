@@ -7,6 +7,7 @@ import {
   checkAvailability,
   confirmBooking,
   getAvailabilityStats,
+  downloadBookingReport,
 } from "../controllers/bookingController.js";
 import { protectAdmin } from "../middleware/authMiddleware.js";
 
@@ -21,5 +22,6 @@ router.post("/confirm", confirmBooking);
 router.get("/", getBookings);
 router.delete("/:id", protectAdmin, deleteBooking);
 router.get("/availability-stats", protectAdmin, getAvailabilityStats);
+router.get("/report", protectAdmin, downloadBookingReport);
 
 export default router;

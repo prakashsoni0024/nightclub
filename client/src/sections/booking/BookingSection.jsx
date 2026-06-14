@@ -21,6 +21,7 @@ const BookingSection = () => {
 
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     phone: "",
     guests: "",
     bookingDate: "",
@@ -47,8 +48,8 @@ const BookingSection = () => {
 
     // GUEST VALIDATION
     if (name === "guests") {
-      if (value > 20) {
-        toast.error("Maximum 20 guests allowed");
+      if (value > 10) {
+        toast.error("Maximum 10 guests allowed");
         return;
       }
 
@@ -65,6 +66,7 @@ const BookingSection = () => {
   const validateForm = () => {
     if (
       !formData.name ||
+      !formData.email ||
       !formData.phone ||
       !formData.guests ||
       !formData.bookingDate ||
@@ -80,9 +82,15 @@ const BookingSection = () => {
       return false;
     }
 
+    // VALID EMAIL
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      toast.error("Enter valid email address");
+      return false;
+    }
+
     // GUEST LIMIT
-    if (formData.guests < 1 || formData.guests > 20) {
-      toast.error("Guests must be between 1 and 20");
+    if (formData.guests < 1 || formData.guests > 10) {
+      toast.error("Guests must be between 1 and 10");
       return false;
     }
 
@@ -149,6 +157,7 @@ const BookingSection = () => {
           try {
             const bookingData = {
               name: formData.name,
+              email: formData.email,
               phone: formData.phone,
               guests: formData.guests,
               bookingDate: formData.bookingDate,
@@ -167,6 +176,7 @@ const BookingSection = () => {
                 bookingId: result.booking?._id || response.razorpay_order_id,
 
                 name: formData.name,
+                email: formData.email,
                 phone: formData.phone,
                 guests: formData.guests,
                 bookingDate: formData.bookingDate,
@@ -192,6 +202,7 @@ const BookingSection = () => {
 
               setFormData({
                 name: "",
+                email: "",
                 phone: "",
                 guests: "",
                 bookingDate: "",
@@ -208,6 +219,7 @@ const BookingSection = () => {
 
         prefill: {
           name: formData.name,
+          email: formData.email,
           contact: formData.phone,
         },
 
@@ -353,6 +365,14 @@ const BookingSection = () => {
                 placeholder="Full Name"
                 name="name"
                 value={formData.name}
+                onChange={handleChange}
+              />
+
+              <InputField
+                type="email"
+                placeholder="Email Address"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
               />
 

@@ -29,3 +29,23 @@ export const getAvailabilityStats = async () => {
 
   return res.data;
 };
+
+// DOWNLOAD BOOKING REPORT PDF
+export const downloadBookingReport = async (
+  period,
+) => {
+  const token = localStorage.getItem("token");
+
+  const res = await API.get(
+    `/bookings/report?period=${period}`,
+    {
+      responseType: "blob",
+
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return res.data;
+};

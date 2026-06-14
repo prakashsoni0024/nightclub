@@ -24,6 +24,7 @@ import {
   getBookings,
   deleteBooking,
   getAvailabilityStats,
+  downloadBookingReport,
 } from "@/services/adminService";
 import { createEvent, deleteEvent, getEvents } from "@/services/eventService";
 import EventsSection from "@/components/admin/EventsSection";
@@ -47,6 +48,8 @@ export default function AdminPage() {
   const [deleteLoading, setDeleteLoading] = useState(null);
   const [galleryDeleteLoading, setGalleryDeleteLoading] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [reportPeriod, setReportPeriod] = useState("week");
 
   const [bookings, setBookings] = useState([]);
   const [events, setEvents] = useState([]);
@@ -107,6 +110,34 @@ export default function AdminPage() {
 
     checkAdmin();
   }, []);
+
+  const handleDownloadReport = async () => {
+    try {
+      const pdf = await downloadBookingReport(reportPeriod);
+
+      const url = window.URL.createObjectURL(pdf);
+
+      const link = document.createElement("a");
+
+      link.href = url;
+
+      link.download = `booking-report-${reportPeriod}.pdf`;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Report downloaded successfully");
+    } catch (error) {
+      console.log(error);
+
+      toast.error("Failed to download report");
+    }
+  };
 
   const fetchBookings = async () => {
     try {
@@ -884,6 +915,9 @@ export default function AdminPage() {
           <BookingsSection
             bookings={filteredBookings}
             handleDeleteBooking={handleDeleteBooking}
+            reportPeriod={reportPeriod}
+            setReportPeriod={setReportPeriod}
+            handleDownloadReport={handleDownloadReport}
           />
 
           {/* Events */}

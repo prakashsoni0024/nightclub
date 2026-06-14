@@ -1,10 +1,11 @@
 import crypto from "crypto";
-
 import razorpay from "../utils/razorpay.js";
-
 import Booking from "../models/Booking.js";
-
 import { TABLE_CAPACITY } from "../config/tableCapacity.js";
+import {
+  sendOwnerBookingEmail,
+  sendCustomerBookingEmail,
+} from "../utils/sendEmail.js";
 
 // CREATE ORDER
 export const createOrder = async (req, res) => {
@@ -92,10 +93,10 @@ export const verifyPayment = async (req, res) => {
       });
     }
 
-    const { name, phone, guests, bookingDate, tableType } = bookingData;
+    const { name, email, phone, guests, bookingDate, tableType } = bookingData;
 
     // BOOKING VALIDATION
-    if (!name || !phone || !guests || !bookingDate || !tableType) {
+    if (!name || !email || !phone || !guests || !bookingDate || !tableType) {
       return res.status(400).json({
         success: false,
         message: "All booking fields are required",
@@ -143,6 +144,7 @@ export const verifyPayment = async (req, res) => {
     // CREATE BOOKING
     const booking = await Booking.create({
       name,
+      email,
       phone,
       guests,
 
@@ -156,6 +158,10 @@ export const verifyPayment = async (req, res) => {
 
       status: "confirmed",
     });
+    
+    // SEND EMAILS to owner and customer
+    await sendOwnerBookingEmail(booking);
+    await sendCustomerBookingEmail(booking);
 
     return res.status(200).json({
       success: true,

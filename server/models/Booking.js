@@ -8,6 +8,13 @@ const bookingSchema = new mongoose.Schema(
       trim: true,
     },
 
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
+
     phone: {
       type: String,
       required: true,
@@ -51,9 +58,8 @@ const bookingSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
-
 
 // prevent overbooking query optimization
 bookingSchema.index({

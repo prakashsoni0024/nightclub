@@ -1,5 +1,6 @@
 import Booking from "../models/Booking.js";
 import { TABLE_CAPACITY } from "../config/tableCapacity.js";
+import PDFDocument from "pdfkit";
 
 export const createBooking = async (req, res) => {
   try {
@@ -271,3 +272,170 @@ export const getAvailabilityStats =
       });
     }
   };
+
+  
+export const downloadBookingReport = async (
+  req,
+  res,
+) => {
+  try {
+    const { period } = req.query;
+
+    let startDate = new Date();
+    const endDate = new Date();
+
+    if (period === "week") {
+      startDate.setDate(
+        startDate.getDate() - 7,
+      );
+    } else if (period === "month") {
+      startDate.setMonth(
+        startDate.getMonth() - 1,
+      );
+    } else if (period === "year") {
+      startDate.setFullYear(
+        startDate.getFullYear() - 1,
+      );
+    } else {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Invalid period. Use week, month or year",
+      });
+    }
+
+    const start = startDate
+      .toISOString()
+      .split("T")[0];
+
+    const end = endDate
+      .toISOString()
+      .split("T")[0];
+
+    const bookings = await Booking.find({
+      bookingDate: {
+        $gte: start,
+        $lte: end,
+      },
+    }).sort({
+      bookingDate: -1,
+    });
+
+    const confirmed = bookings.filter(
+      (b) => b.status === "confirmed",
+    ).length;
+
+    const pending = bookings.filter(
+      (b) => b.status === "pending",
+    ).length;
+
+    const cancelled = bookings.filter(
+      (b) => b.status === "cancelled",
+    ).length;
+
+    const doc = new PDFDocument({
+      margin: 40,
+      size: "A4",
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/pdf",
+    );
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=booking-report-${period}.pdf`,
+    );
+
+    doc.pipe(res);
+
+    // Header
+    doc
+      .fontSize(22)
+      .text("D'CASA NIGHTCLUB", {
+        align: "center",
+      });
+
+    doc.moveDown(0.5);
+
+    doc
+      .fontSize(16)
+      .text("Booking Report", {
+        align: "center",
+      });
+
+    doc.moveDown();
+
+    doc.fontSize(12);
+
+    doc.text(
+      `Period: ${period.toUpperCase()}`,
+    );
+
+    doc.text(
+      `Generated On: ${new Date().toLocaleString()}`,
+    );
+
+    doc.moveDown();
+
+    doc.text(
+      `Total Bookings: ${bookings.length}`,
+    );
+
+    doc.text(`Confirmed: ${confirmed}`);
+
+    doc.text(`Pending: ${pending}`);
+
+    doc.text(`Cancelled: ${cancelled}`);
+
+    doc.moveDown();
+
+    doc
+      .fontSize(14)
+      .text("Bookings", {
+        underline: true,
+      });
+
+    doc.moveDown();
+
+    bookings.forEach((booking, index) => {
+      doc
+        .fontSize(12)
+        .text(
+          `${index + 1}. ${booking.name}`,
+        );
+
+      doc.text(
+        `Phone: ${booking.phone}`,
+      );
+
+      doc.text(
+        `Guests: ${booking.guests}`,
+      );
+
+      doc.text(
+        `Booking Date: ${booking.bookingDate}`,
+      );
+
+      doc.text(
+        `Table Type: ${booking.tableType}`,
+      );
+
+      doc.text(
+        `Status: ${booking.status}`,
+      );
+
+      doc.moveDown();
+    });
+
+    doc.end();
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
