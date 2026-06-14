@@ -207,8 +207,7 @@ export const checkAvailability = async (req, res) => {
   }
 };
 
-export const getAvailabilityStats =
-  async (req, res) => {
+export const getAvailabilityStats = async (req, res) => {
 
     try {
 
@@ -273,7 +272,6 @@ export const getAvailabilityStats =
     }
   };
 
-  
 export const downloadBookingReport = async (
   req,
   res,

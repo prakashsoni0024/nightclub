@@ -160,8 +160,8 @@ export const verifyPayment = async (req, res) => {
     });
     
     // SEND EMAILS to owner and customer
-    await sendOwnerBookingEmail(booking);
-    await sendCustomerBookingEmail(booking);
+    // await sendOwnerBookingEmail(booking);
+    // await sendCustomerBookingEmail(booking);
 
     return res.status(200).json({
       success: true,
