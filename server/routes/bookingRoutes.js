@@ -24,4 +24,5 @@ router.delete("/:id", protectAdmin, deleteBooking);
 router.get("/availability-stats", protectAdmin, getAvailabilityStats);
 router.get("/report", protectAdmin, downloadBookingReport);
 
+
 export default router;

@@ -11,10 +11,22 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("SMTP Error:", error);
+  } else {
+    console.log("SMTP Server Ready");
+  }
+});
+
+console.log("USER:", process.env.BREVO_USER);
+console.log("KEY:", process.env.BREVO_SMTP_KEY?.slice(0, 10));
+
 export const sendOwnerBookingEmail = async (booking) => {
   try {
+    console.time("owner-email");
     await transporter.sendMail({
-      from: process.env.BREVO_USER,
+      from: process.env.EMAIL_FROM,
       to: process.env.OWNER_EMAIL,
       subject: "New Table Reservation",
       html: `
@@ -29,6 +41,7 @@ export const sendOwnerBookingEmail = async (booking) => {
       `,
     });
 
+    console.timeEnd("owner-email");
     console.log("Owner Email Sent");
   } catch (error) {
     console.error("Email Error:", error);
@@ -37,8 +50,9 @@ export const sendOwnerBookingEmail = async (booking) => {
 
 export const sendCustomerBookingEmail = async (booking) => {
   try {
+    console.time("customer-email");
     await transporter.sendMail({
-      from: process.env.BREVO_USER,
+      from: process.env.EMAIL_FROM,
       to: booking.email,
       subject: "Table Reservation Confirmed 🎉",
       html: `
@@ -67,9 +81,26 @@ export const sendCustomerBookingEmail = async (booking) => {
         </div>
       `,
     });
-
+    console.timeEnd("customer-email");
     console.log("Customer Email Sent");
   } catch (error) {
     console.error("Customer Email Error:", error);
+  }
+};
+
+export const sendTestEmail = async () => {
+  try {
+    console.time("Test Email Duration");
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_FROM,
+      to: process.env.OWNER_EMAIL,
+      subject: "Brevo Test",
+      html: "<h1>Brevo Working 🚀</h1>",
+    });
+
+    console.log("TEST EMAIL SENT");
+    console.log(info);
+  } catch (error) {
+    console.error("TEST EMAIL ERROR:", error);
   }
 };

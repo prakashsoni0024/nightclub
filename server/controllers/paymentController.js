@@ -158,24 +158,23 @@ export const verifyPayment = async (req, res) => {
 
       status: "confirmed",
     });
-    
+
     // SEND EMAILS to owner and customer
     // await sendOwnerBookingEmail(booking);
     // await sendCustomerBookingEmail(booking);
 
+    // Background email sending
+    Promise.all([
+      sendOwnerBookingEmail(booking),
+      sendCustomerBookingEmail(booking),
+    ]).catch((err) => {
+      console.error("Email Error:", err);
+    });
     return res.status(200).json({
       success: true,
       message: "Payment verified successfully",
       booking,
     });
-
-    promise.all([
-      sendOwnerBookingEmail(booking),
-      sendCustomerBookingEmail(booking),
-    ]).catch((emailError) => {
-      console.log("Email sending error:", emailError);
-    });
-    
   } catch (error) {
     console.log(error);
 

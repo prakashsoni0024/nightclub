@@ -12,13 +12,15 @@ import galleryRoutes from "./routes/galleryRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 
 
+
+
 dotenv.config();
 
 const app = express();
 // "https://nightclub-9u85.vercel.app",
 app.use(
   cors({
-    origin: ["https://nightclub-9u85.vercel.app"],
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),
@@ -44,6 +46,9 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/gallery", galleryRoutes);
 app.use("/api/payment", paymentRoutes);
+
+
+
 
 const PORT = process.env.PORT || 5000;
 
