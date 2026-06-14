@@ -20,7 +20,7 @@ const app = express();
 // "https://nightclub-9u85.vercel.app",
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://nightclub-9u85.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),

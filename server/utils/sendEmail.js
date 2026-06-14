@@ -88,19 +88,4 @@ export const sendCustomerBookingEmail = async (booking) => {
   }
 };
 
-export const sendTestEmail = async () => {
-  try {
-    console.time("Test Email Duration");
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_FROM,
-      to: process.env.OWNER_EMAIL,
-      subject: "Brevo Test",
-      html: "<h1>Brevo Working 🚀</h1>",
-    });
 
-    console.log("TEST EMAIL SENT");
-    console.log(info);
-  } catch (error) {
-    console.error("TEST EMAIL ERROR:", error);
-  }
-};
