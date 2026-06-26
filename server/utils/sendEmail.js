@@ -1,36 +1,26 @@
-import nodemailer from "nodemailer";
+import SibApiV3Sdk from "sib-api-v3-sdk";
 
+const client = SibApiV3Sdk.ApiClient.instance;
 
-const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 465,
-  secure: true,
-  requireTLS: true,
-  auth: {
-    user: process.env.BREVO_USER,
-    pass: process.env.BREVO_SMTP_KEY,
-  },
-});
+client.authentications["api-key"].apiKey =
+  process.env.BREVO_API_KEY;
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.log("SMTP Error:", error);
-  } else {
-    console.log("SMTP Server Ready");
-  }
-});
-
-console.log("USER:", process.env.BREVO_USER);
-console.log("KEY:", process.env.BREVO_SMTP_KEY?.slice(0, 10));
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
 export const sendOwnerBookingEmail = async (booking) => {
   try {
-    console.time("owner-email");
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM,
-      to: process.env.OWNER_EMAIL,
+    const result = await apiInstance.sendTransacEmail({
+      sender: {
+        email: process.env.EMAIL_FROM,
+        name: "Nightclub",
+      },
+      to: [
+        {
+          email: process.env.OWNER_EMAIL,
+        },
+      ],
       subject: "New Table Reservation",
-      html: `
+      htmlContent: `
         <h2>New Booking Received</h2>
 
         <p><strong>Name:</strong> ${booking.name}</p>
@@ -42,51 +32,44 @@ export const sendOwnerBookingEmail = async (booking) => {
       `,
     });
 
-    console.timeEnd("owner-email");
-    console.log("Owner Email Sent");
+    console.log("Owner Email Sent", result);
   } catch (error) {
-    console.error("Email Error:", error);
+    console.error("Owner Email Error:", error);
   }
 };
 
 export const sendCustomerBookingEmail = async (booking) => {
   try {
-    console.time("customer-email");
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM,
-      to: booking.email,
+    const result = await apiInstance.sendTransacEmail({
+      sender: {
+        email: process.env.EMAIL_FROM,
+        name: "Nightclub",
+      },
+      to: [
+        {
+          email: booking.email,
+        },
+      ],
       subject: "Table Reservation Confirmed 🎉",
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width:600px; margin:auto;">
+      htmlContent: `
+        <div style="font-family: Arial, sans-serif;">
           <h2>Reservation Confirmed 🎉</h2>
 
           <p>Hello ${booking.name},</p>
 
-          <p>Your table reservation has been confirmed successfully.</p>
+          <p>Your reservation has been confirmed.</p>
 
-          <hr>
-
-          <h3>Booking Details</h3>
-
-          <p><strong>Name:</strong> ${booking.name}</p>
           <p><strong>Date:</strong> ${booking.bookingDate}</p>
           <p><strong>Guests:</strong> ${booking.guests}</p>
           <p><strong>Table Type:</strong> ${booking.tableType}</p>
-          <p><strong>Booking ID:</strong> ${booking._id}</p>
-
-          <hr>
-
-          <p>We look forward to welcoming you.</p>
 
           <p>Thank you for choosing us.</p>
         </div>
       `,
     });
-    console.timeEnd("customer-email");
-    console.log("Customer Email Sent");
+
+    console.log("Customer Email Sent", result);
   } catch (error) {
     console.error("Customer Email Error:", error);
   }
 };
-
-
