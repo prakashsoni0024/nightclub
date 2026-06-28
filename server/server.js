@@ -20,7 +20,7 @@ const app = express();
 // "https://nightclub-9u85.vercel.app",
 app.use(
   cors({
-    origin: ["https://nightclub-9u85.vercel.app"],
+    origin: ["https://dcasathepub.com"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),
