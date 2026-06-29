@@ -6,6 +6,7 @@ export const createBooking = async (req, res) => {
   try {
     const {
       name,
+      email,
       phone,
       guests,
       bookingDate,
@@ -13,20 +14,6 @@ export const createBooking = async (req, res) => {
       paymentId,
       orderId,
     } = req.body;
-
-    // validation
-    if (
-      !name ||
-      !phone ||
-      !guests ||
-      !bookingDate ||
-      !tableType
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
 
     const type = tableType.toUpperCase().trim();
 
@@ -61,6 +48,7 @@ export const createBooking = async (req, res) => {
     // CREATE BOOKING
     const booking = await Booking.create({
       name,
+      email,
       phone,
       guests,
       bookingDate,

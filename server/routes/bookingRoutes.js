@@ -1,4 +1,6 @@
 import express from "express";
+import { bookingValidation } from "../validators/bookingValidator.js";
+import { validate } from "../middleware/validationMiddleware.js";
 
 import {
   createBooking,
@@ -15,7 +17,7 @@ const router = express.Router();
 
 // SaaS FLOW ROUTES
 router.post("/check-availability", checkAvailability);
-router.post("/", createBooking);
+router.post("/", bookingValidation, validate, createBooking);
 router.post("/confirm", confirmBooking);
 
 // ADMIN ROUTES
@@ -23,6 +25,5 @@ router.get("/", getBookings);
 router.delete("/:id", protectAdmin, deleteBooking);
 router.get("/availability-stats", protectAdmin, getAvailabilityStats);
 router.get("/report", protectAdmin, downloadBookingReport);
-
 
 export default router;

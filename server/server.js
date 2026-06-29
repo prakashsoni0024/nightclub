@@ -17,10 +17,10 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 dotenv.config();
 
 const app = express();
-// "https://nightclub-9u85.vercel.app",
+
 app.use(
   cors({
-    origin: ["https://dcasathepub.com"],
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),
