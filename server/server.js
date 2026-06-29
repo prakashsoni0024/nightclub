@@ -20,7 +20,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://dcasathepub.com/"],
+    origin: ["https://dcasathepub.com"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),
