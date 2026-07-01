@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { loginAdmin } from "@/services/authService";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
@@ -10,14 +11,39 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
   const router = useRouter();
 
   const handleLogin = async (e) => {
+    setErrors({
+      email: "",
+      password: "",
+    });
+
     e.preventDefault();
 
-    if (!email || !password) {
-      toast.error("Enter credentials");
+    let validationErrors = {};
+
+    if (!email.trim()) {
+      validationErrors.email = "Email is required";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email.trim() && !emailRegex.test(email.trim())) {
+      validationErrors.email = "Please enter a valid email";
+    }
+
+    if (!password) {
+      validationErrors.password = "Password is required";
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
@@ -34,9 +60,21 @@ export default function AdminLogin() {
         router.push("/admin");
       }, 700);
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Login failed"
-      );
+      const message = error.response?.data?.message;
+
+      if (message === "Email not found") {
+        setErrors({
+          email: message,
+          password: "",
+        });
+      } else if (message === "Incorrect password") {
+        setErrors({
+          email: "",
+          password: message,
+        });
+      } else {
+        toast.error(message || "Login failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -44,7 +82,6 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex bg-black overflow-hidden relative">
-
       <Toaster
         position="top-right"
         toastOptions={{
@@ -95,28 +132,34 @@ export default function AdminLogin() {
           transition={{ duration: 0.6 }}
           className="w-full max-w-md relative"
         >
-
           {/* floating glow frame */}
           <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-cyan-500/20 blur-2xl rounded-[40px]" />
 
           <div className="relative z-10 backdrop-blur-2xl bg-black/40 border border-white/10 rounded-[40px] p-10">
-
             <h2 className="text-4xl font-black uppercase tracking-[0.2em] mb-2">
               Admin
             </h2>
 
-            <p className="text-gray-400 text-sm mb-8">
-              Secure Access Panel
-            </p>
+            <p className="text-gray-400 text-sm mb-8">Secure Access Panel</p>
 
             {/* Email */}
             <input
               type="email"
+              autoComplete="email"
               placeholder="Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+
+                if (errors.email) {
+                  setErrors((prev) => ({
+                    ...prev,
+                    email: "",
+                  }));
+                }
+              }}
               className="
-              w-full p-4 mb-4
+              w-full p-4 mb-2
               bg-black/50
               border border-white/10
               rounded-2xl
@@ -125,23 +168,61 @@ export default function AdminLogin() {
               transition
               "
             />
+            {errors.email && (
+              <p className="mb-4 text-sm text-red-400">{errors.email}</p>
+            )}
 
             {/* Password */}
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="
-              w-full p-4 mb-6
-              bg-black/50
-              border border-white/10
-              rounded-2xl
-              outline-none
-              focus:border-cyan-500
-              transition
-              "
-            />
+            <div className="relative mb-6">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                autoComplete="current-password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+
+                  if (errors.password) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      password: "",
+                    }));
+                  }
+                }}
+                className="
+      w-full
+      p-4
+      pr-14
+      bg-black/50
+      border border-white/10
+      rounded-2xl
+      outline-none
+      focus:border-cyan-500
+      transition
+    "
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="
+      absolute
+      right-4
+      top-1/2
+      -translate-y-1/2
+      text-gray-400
+      hover:text-white
+      transition
+    "
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="mb-6 -mt-4 text-sm text-red-400">
+                {errors.password}
+              </p>
+            )}
 
             {/* Button */}
             <button
@@ -165,7 +246,6 @@ export default function AdminLogin() {
                 {loading ? "Authenticating..." : "Enter Dashboard"}
               </span>
             </button>
-
           </div>
         </motion.form>
       </div>

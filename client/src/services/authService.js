@@ -25,3 +25,15 @@ export const verifyAdmin = async () => {
 
   return res.data;
 };
+
+export const updateProfile = async (data) => {
+  const token = localStorage.getItem("token");
+
+  const res = await API.put("/auth/update-profile", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
