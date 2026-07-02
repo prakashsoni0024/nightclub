@@ -124,14 +124,14 @@ const BookingSection = () => {
       }
 
       // PRICING
-      let amount = 2000;
+      let amount = 1;
 
       if (formData.tableType === "VIP") {
-        amount = 5000;
+        amount = 1;
       }
 
       if (formData.tableType === "PREMIUM_LOUNGE") {
-        amount = 10000;
+        amount = 1;
       }
 
       // CREATE ORDER

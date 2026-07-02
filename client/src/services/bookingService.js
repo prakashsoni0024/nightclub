@@ -1,15 +1,6 @@
 import axios from "axios";
 import API from "./api";
 
-// export const checkAvailability = async (bookingDate, tableType) => {
-//   const { data } = await API.post("/booking/check-availability", {
-//     bookingDate,
-//     tableType,
-//   });
-
-//   return data;
-// };
-
 export const checkAvailability = async (
   bookingDate,
   tableType
