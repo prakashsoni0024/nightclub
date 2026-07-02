@@ -7,11 +7,18 @@ import { getGallery } from "@/services/galleryService";
 
 const GallerySection = () => {
   const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchImages = async () => {
-      const data = await getGallery();
-      setImages(data.images);
+      try {
+        const data = await getGallery();
+        setImages(data.images);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchImages();
@@ -19,7 +26,6 @@ const GallerySection = () => {
 
   return (
     <section className="relative py-32 px-6 bg-[#0B0B10] overflow-hidden">
-
       {/* Soft cinematic spotlight (NO neon overload) */}
       <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-purple-500/10 blur-[180px] rounded-full" />
 
@@ -27,10 +33,8 @@ const GallerySection = () => {
       <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:120px_120px]" />
 
       <div className="container-width relative z-10">
-
         {/* Header */}
         <div className="text-center mb-24">
-
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -49,53 +53,67 @@ const GallerySection = () => {
           </motion.h2>
 
           <p className="text-gray-400 mt-8 max-w-2xl mx-auto">
-            A curated collection of nightlife memories — styled like a luxury editorial gallery.
+            A curated collection of nightlife memories — styled like a luxury
+            editorial gallery.
           </p>
         </div>
 
         {/* Gallery Grid (clean museum style) */}
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <div className="w-12 h-12 rounded-full border-2 border-purple-500 border-t-transparent animate-spin" />
+          </div>
+        ) : images.length === 0 ? (
+          <div className="text-center py-20">
+            <h3 className="text-2xl font-semibold text-white">
+              No Images Found
+            </h3>
 
-          {images.map((img, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
-              className="
-                group
-                relative
-                overflow-hidden
-                rounded-2xl
-                break-inside-avoid
-                bg-white/[0.03]
-                border
-                border-white/10
-              "
-            >
-              <img
-                src={img.imageUrl}
+            <p className="text-gray-500 mt-3">
+              Gallery images will be available soon.
+            </p>
+          </div>
+        ) : (
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+            {images.map((img, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: i * 0.05 }}
                 className="
-                  w-full
-                  object-cover
-                  transition
-                  duration-700
-                  group-hover:scale-105
-                  opacity-90
-                  group-hover:opacity-100
-                "
-              />
+          group
+          relative
+          overflow-hidden
+          rounded-2xl
+          break-inside-avoid
+          bg-white/[0.03]
+          border
+          border-white/10
+        "
+              >
+                <img
+                  src={img.imageUrl}
+                  className="
+            w-full
+            object-cover
+            transition
+            duration-700
+            group-hover:scale-105
+            opacity-90
+            group-hover:opacity-100
+          "
+                />
 
-              {/* soft bottom fade only */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
-              {/* label */}
-              <div className="absolute bottom-4 left-4 text-xs tracking-[0.3em] uppercase text-purple-200">
-                {img.label || "Nightlife"}
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                <div className="absolute bottom-4 left-4 text-xs tracking-[0.3em] uppercase text-purple-200">
+                  {img.label || "Nightlife"}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
