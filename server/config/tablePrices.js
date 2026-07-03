@@ -1,0 +1,5 @@
+export const TABLE_PRICES = {
+  REGULAR: 999,
+  VIP: 1999,
+  PREMIUM_LOUNGE: 2999,
+};

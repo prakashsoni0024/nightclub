@@ -123,19 +123,8 @@ const BookingSection = () => {
         return;
       }
 
-      // PRICING
-      let amount = 1;
-
-      if (formData.tableType === "VIP") {
-        amount = 1;
-      }
-
-      if (formData.tableType === "PREMIUM_LOUNGE") {
-        amount = 1;
-      }
-
       // CREATE ORDER
-      const response = await createOrder(amount);
+      const response = await createOrder(formData.tableType);
 
       if (!response.success) {
         toast.error("Order creation failed");

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL:"https://nightclub.onrender.com/api",
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
 });
 
 API.interceptors.request.use((req) => {
@@ -15,4 +15,3 @@ API.interceptors.request.use((req) => {
 });
 
 export default API;
-// https://nightclub.onrender.com/api

@@ -6,16 +6,20 @@ import {
   sendOwnerBookingEmail,
   sendCustomerBookingEmail,
 } from "../utils/sendEmail.js";
+import { TABLE_PRICES } from "../config/tablePrices.js";
 
 // CREATE ORDER
 export const createOrder = async (req, res) => {
   try {
-    const { amount } = req.body;
+    const { tableType } = req.body;
 
+    const type = tableType.toUpperCase().trim();
+
+    const amount = TABLE_PRICES[type];
     if (!amount) {
       return res.status(400).json({
         success: false,
-        message: "Amount is required",
+        message: "Invalid table type",
       });
     }
 

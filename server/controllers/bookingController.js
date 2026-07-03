@@ -13,6 +13,7 @@ export const createBooking = async (req, res) => {
       tableType,
       paymentId,
       orderId,
+      amount,
     } = req.body;
 
     const type = tableType.toUpperCase().trim();

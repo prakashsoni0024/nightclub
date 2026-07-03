@@ -17,10 +17,10 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 dotenv.config();
 
 const app = express();
-// https://dcasathepub.com
+
 app.use(
   cors({
-    origin: ["https://dcasathepub.com"],
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),

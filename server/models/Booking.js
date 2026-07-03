@@ -55,6 +55,11 @@ const bookingSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+
+    amount: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,

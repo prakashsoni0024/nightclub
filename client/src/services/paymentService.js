@@ -1,11 +1,11 @@
 import API from "./api";
 
-export const createOrder = async (amount) => {
+export const createOrder = async (tableType) => {
   try {
     const { data } = await API.post(
       "/payment/create-order",
       {
-        amount,
+        tableType,
       }
     );
 
