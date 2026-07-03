@@ -13,6 +13,12 @@ export const createOrder = async (req, res) => {
   try {
     const { tableType } = req.body;
 
+    if (!tableType) {
+      return res.status(400).json({
+        success: false,
+        message: "Table type is required",
+      });
+    }
     const type = tableType.toUpperCase().trim();
 
     const amount = TABLE_PRICES[type];
@@ -112,6 +118,15 @@ export const verifyPayment = async (req, res) => {
     // CHECK TABLE TYPE
     const totalTables = TABLE_CAPACITY[type];
 
+    const amount = TABLE_PRICES[type];
+
+    if (!amount) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid table price",
+      });
+    }
+
     if (!totalTables) {
       return res.status(400).json({
         success: false,
@@ -151,15 +166,11 @@ export const verifyPayment = async (req, res) => {
       email,
       phone,
       guests,
-
       bookingDate,
-
       tableType: type,
-
       paymentId: razorpay_payment_id,
-
       orderId: razorpay_order_id,
-
+      amount,
       status: "confirmed",
     });
 

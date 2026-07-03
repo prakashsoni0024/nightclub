@@ -171,7 +171,7 @@ const BookingSection = () => {
                 bookingDate: formData.bookingDate,
                 tableType: formData.tableType,
 
-                amount: amount,
+                amount: result.booking.amount,
 
                 paymentId: response.razorpay_payment_id,
               };

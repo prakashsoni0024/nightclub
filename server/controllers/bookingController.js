@@ -56,6 +56,7 @@ export const createBooking = async (req, res) => {
       tableType: type,
       paymentId,
       orderId,
+      amount,
       status: "confirmed",
     });
 
