@@ -1,0 +1,39 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#F9D976"/>
+            <stop offset="45%" stop-color="#D4AF37"/>
+            <stop offset="100%" stop-color="#A67C00"/>
+        </linearGradient>
+    </defs>
+
+    <!-- Background -->
+    <circle cx="256" cy="256" r="236"
+        fill="#0B0B0B"
+        stroke="url(#gold)"
+        stroke-width="14"/>
+
+    <!-- Letter -->
+    <text
+        x="248"
+        y="330"
+        text-anchor="middle"
+        font-size="250"
+        font-family="Cinzel, Georgia, serif"
+        font-weight="700"
+        fill="url(#gold)">
+        D
+    </text>
+
+    <!-- Apostrophe -->
+    <text
+        x="355"
+        y="170"
+        text-anchor="middle"
+        font-size="75"
+        font-family="Cinzel, Georgia, serif"
+        font-weight="700"
+        fill="url(#gold)">
+        '
+    </text>
+</svg>

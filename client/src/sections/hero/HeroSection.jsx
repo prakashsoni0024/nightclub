@@ -48,14 +48,14 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 80 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-6xl sm:text-7xl md:text-9xl font-black uppercase leading-none"
+          className="text-6xl sm:text-7xl md:text-9xl font-black font-cormorant leading-none"
         >
-          <span className="text-white">Own</span>
+          <span className="text-white">D'Casa</span>
 
           <br />
 
           <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-            The Night
+            The Pub
           </span>
         </motion.h1>
 
@@ -126,7 +126,7 @@ tracking-wide
               key={index}
               className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6"
             >
-              <h3 className="text-3xl font-bold text-white">
+              <h3 className="text-3xl font-cinzel font-bold text-white">
                 {item.number}
               </h3>
 

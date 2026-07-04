@@ -1,3 +1,4 @@
+"use client";
 import {
   FaInstagram,
   FaPhoneAlt,
@@ -5,6 +6,7 @@ import {
   FaClock,
 } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
+import { motion } from "framer-motion";
 
 const contactItems = [
   {
@@ -58,17 +60,24 @@ const ContactSection = () => {
       <div className="container-width relative z-10">
         {/* Heading */}
         <div className="mb-20 text-center">
-          <p className="mb-5 text-sm uppercase tracking-[0.35em] text-cyan-400">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+             className="mb-5 text-sm uppercase tracking-[0.35em] text-cyan-400">
             Get In Touch
-          </p>
+          </motion.p>
 
-          <h2 className="text-5xl font-black uppercase leading-none tracking-[0.08em] md:text-7xl">
+          <motion.h2
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-5xl font-black font-cinzel leading-none tracking-[0.08em] md:text-7xl"
+            >
             <span className="text-white">Let's Connect</span>
             <br />
             <span className="bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               &amp; Party Together
             </span>
-          </h2>
+          </motion.h2>
 
           <p className="mx-auto mt-8 max-w-2xl text-lg text-gray-400">
             We’re always ready to bring you into the most exclusive nightlife
@@ -78,7 +87,12 @@ const ContactSection = () => {
 
         <div className="grid items-stretch gap-14 lg:grid-cols-2">
           {/* Left Side */}
-          <div className="flex h-[520px] flex-col gap-4">
+           <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+            className="flex h-[520px] flex-col gap-4">
             {contactItems.map((item, index) => (
               <div
                 key={index}
@@ -133,10 +147,14 @@ const ContactSection = () => {
                 </div>
               </div>
             ))}
-          </div>
+          </motion.div>
 
           {/* Right Side Map */}
-          <div
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
             className="
               relative
               h-[520px]
@@ -160,7 +178,7 @@ const ContactSection = () => {
               referrerPolicy="no-referrer-when-downgrade"
               className="border-0"
             />
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

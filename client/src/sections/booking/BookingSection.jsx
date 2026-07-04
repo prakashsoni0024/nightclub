@@ -303,7 +303,7 @@ const BookingSection = () => {
               Table Reservation
             </p>
 
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase leading-[1] tracking-[0.08em]">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black font-cinzel leading-[1] tracking-[0.08em]">
               <span className="text-white">Reserve Your</span>
 
               <br />

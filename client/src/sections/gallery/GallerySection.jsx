@@ -46,7 +46,7 @@ const GallerySection = () => {
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-black uppercase mt-6 tracking-[0.1em]"
+            className="text-5xl md:text-7xl font-black font-cinzel mt-6 tracking-[0.1em]"
           >
             <span className="text-white">Moments</span>{" "}
             <span className="text-purple-400">Captured</span>

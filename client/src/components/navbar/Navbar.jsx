@@ -17,6 +17,7 @@ const Navbar = () => {
   ];
 
   return (
+    //  font-[family:var(--font-great-vibes)]
     <header className="fixed top-0 left-0 w-full z-50">
       {/* Glassmorphism Navbar */}
       <div className="mx-auto max-w-7xl px-4 md:px-8 pt-4">
@@ -25,8 +26,9 @@ const Navbar = () => {
           <Link
             href="/"
             className="
-    font-[family:var(--font-great-vibes)]
+   
     text-3xl md:text-4xl
+    font-[family:var(--font-great-vibes)]
     leading-none
     whitespace-nowrap
     bg-gradient-to-r

@@ -9,8 +9,17 @@ import {
   Inter,
   Playfair_Display,
   Cinzel,
+  Bodoni_Moda,
+  Marcellus,
   Great_Vibes,
+  Cormorant_Garamond,
 } from "next/font/google";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-cormorant",
+});
 
 const greatVibes = Great_Vibes({
   subsets: ["latin"],
@@ -18,10 +27,22 @@ const greatVibes = Great_Vibes({
   variable: "--font-great-vibes",
 });
 
+const marcellus = Marcellus({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-marcellus",
+});
+
 const cinzel = Cinzel({
   subsets: ["latin"],
   weight: ["600", "700", "800"],
   variable: "--font-cinzel",
+});
+
+const bodoni = Bodoni_Moda({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-bodoni",
 });
 
 const inter = Inter({
@@ -132,9 +153,10 @@ export const metadata = {
   },
 
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+
   },
 };
 
@@ -146,7 +168,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en-IN" data-scroll-behavior="smooth">
       <body
-        className={`${inter.variable} ${playfair.variable} ${bebas.variable} ${sora.variable} ${cinzel.variable} ${greatVibes.variable}`}
+        className={`${inter.variable} ${playfair.variable} ${bebas.variable} ${sora.variable} ${cinzel.variable} ${greatVibes.variable} ${cormorant.variable}`}
       >
         <Navbar />
 

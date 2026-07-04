@@ -75,12 +75,12 @@ const EventsSection = () => {
               sm:text-6xl
               md:text-7xl
               font-black
-              uppercase
+              font-cinzel
               leading-[0.95]
               tracking-[0.08em]
               "
             >
-              <span className="text-white">
+              <span className="text-whitet">
                 Nights You
               </span>
 

@@ -5,6 +5,12 @@
   --foreground: #ffffff;
   --font-heading: var(--font-bebas);
   --font-body: var(--font-sora);
+  --font-playfair: var(--font-playfair);
+  --font-cormorant: var(--font-cormorant);
+  --font-cinzel: var(--font-cinzel);
+  --font-bodoni: var(--font-bodoni);
+  --font-marcellus: var(--font-marcellus);
+
 }
 
 body {
@@ -33,6 +39,30 @@ button {
 
 option {
   background: #111;
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-playfair {
+  font-family: var(--font-playfair);
+}
+
+.font-marcellus {
+  font-family: var(--font-marcellus);
+}
+
+.font-cormorant {
+  font-family: var(--font-cormorant);
+}
+
+.font-cinzel {
+  font-family: var(--font-cinzel);
+}
+
+.font-bodoni {
+  font-family: var(--font-bodoni);
 }
 
 .glass-card {

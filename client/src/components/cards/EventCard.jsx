@@ -113,6 +113,7 @@ const EventCard = ({ event }) => {
             uppercase
             leading-tight
             tracking-[0.05em]
+            font-cinzel
             text-white
             "
           >
