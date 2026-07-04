@@ -40,7 +40,7 @@ const GallerySection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-purple-300 uppercase tracking-[0.4em] text-sm"
           >
-            Visual Archive
+            D'Casa Gallery
           </motion.p>
 
           <motion.h2
@@ -66,11 +66,11 @@ const GallerySection = () => {
         ) : images.length === 0 ? (
           <div className="text-center py-20">
             <h3 className="text-2xl font-semibold text-white">
-              No Images Found
+              Gallery Coming Soon
             </h3>
 
             <p className="text-gray-500 mt-3">
-              Gallery images will be available soon.
+              We're adding photos from our latest DJ nights, live events and premium nightlife experiences. Check back soon.
             </p>
           </div>
         ) : (
@@ -94,6 +94,9 @@ const GallerySection = () => {
               >
                 <img
                   src={img.imageUrl}
+                  alt={`${img.label || "Nightlife"} - DCASA The Pub Jabalpur`}
+                  loading="lazy"
+                  decoding="async"
                   className="
             w-full
             object-cover

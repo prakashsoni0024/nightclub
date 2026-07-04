@@ -12,7 +12,7 @@ export const sendOwnerBookingEmail = async (booking) => {
     const result = await apiInstance.sendTransacEmail({
       sender: {
         email: process.env.EMAIL_FROM,
-        name: "Nightclub",
+        name: "D'Casa The Pub",
       },
       to: [
         {
@@ -43,7 +43,7 @@ export const sendCustomerBookingEmail = async (booking) => {
     const result = await apiInstance.sendTransacEmail({
       sender: {
         email: process.env.EMAIL_FROM,
-        name: "Nightclub",
+        name: "D'Casa The Pub",
       },
       to: [
         {

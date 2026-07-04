@@ -31,7 +31,9 @@ const EventCard = ({ event }) => {
         {/* Image */}
         <img
           src={event.image}
-          alt={event.title}
+          alt={`${event.title} at D'Casa The Pub, Jabalpur`}
+          loading="lazy"
+          decoding="async"
           className="
           h-full
           w-full
@@ -84,7 +86,7 @@ const EventCard = ({ event }) => {
           text-white
           "
         >
-          {event.price}
+          ₹{event.price}
         </div>
 
         {/* Bottom Content On Image */}
@@ -122,7 +124,7 @@ const EventCard = ({ event }) => {
       {/* Bottom Section */}
       <div className="relative z-10 p-6">
         {/* Description */}
-        <p className="text-gray-400 leading-relaxed text-sm">
+        <p className="text-gray-400 line-clamp-3 ... leading-relaxed text-sm">
           {event.description}
         </p>
 
@@ -131,15 +133,16 @@ const EventCard = ({ event }) => {
           {/* Guests */}
           <div>
             <p className="text-gray-500 text-xs uppercase tracking-[0.2em]">
-              Entry
+              Booking
             </p>
 
-            <h4 className="text-white font-semibold mt-1">VIP Access</h4>
+            <h4 className="text-white/90 font-semibold mt-1">Reserve Online</h4>
           </div>
 
           {/* Button */}
           <button
             onClick={() => router.push("/booking")}
+            aria-label={`Book a table for ${event.title}`}
             className="
       group/btn
       flex

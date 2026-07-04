@@ -4,104 +4,126 @@ import {
   FaMapMarkerAlt,
   FaClock,
 } from "react-icons/fa";
+import { MdOutlineEmail } from "react-icons/md";
+
+const contactItems = [
+  {
+    icon: <FaPhoneAlt />,
+    title: "Phone",
+    value: "+91 98765 43210",
+    link: "tel:+919876543210",
+    external: false,
+  },
+  {
+    icon: <MdOutlineEmail />,
+    title: "Email",
+    value: "info@dcasapub.com",
+    link: "mailto:info@dcasapub.com",
+    external: false,
+  },
+  {
+    icon: <FaMapMarkerAlt />,
+    title: "Location",
+    value: "Deendayal, Jabalpur, Madhya Pradesh",
+    link: "https://maps.google.com/?q=Deendayal,+Jabalpur,+Madhya+Pradesh",
+    external: true,
+  },
+  {
+    icon: <FaClock />,
+    title: "Opening Hours",
+    value: "Mon - Sun : 7:00 PM - 4:00 AM",
+  },
+  {
+    icon: <FaInstagram />,
+    title: "Instagram",
+    value: "@dcasapub",
+    link: "https://instagram.com/dcasapub",
+    external: true,
+  },
+];
 
 const ContactSection = () => {
   return (
-    <section className="relative py-32 px-6 bg-[#070A12] overflow-hidden">
-      {/* Soft Neon Background (different from booking section) */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[160px] rounded-full" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/10 blur-[160px] rounded-full" />
+    <section
+      className="relative overflow-hidden bg-[#070A12] px-6 py-32"
+      id="contact"
+    >
+      {/* Background Glow */}
+      <div className="absolute left-0 top-0 h-[500px] w-[500px] rounded-full bg-cyan-500/10 blur-[160px]" />
+      <div className="absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-purple-500/10 blur-[160px]" />
 
-      {/* Subtle grid */}
-      <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#ffffff22_1px,transparent_1px),linear-gradient(to_bottom,#ffffff22_1px,transparent_1px)] bg-[size:100px_100px]" />
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff22_1px,transparent_1px),linear-gradient(to_bottom,#ffffff22_1px,transparent_1px)] bg-[size:100px_100px] opacity-[0.05]" />
 
       <div className="container-width relative z-10">
         {/* Heading */}
-        <div className="text-center mb-20">
-          <p className="text-cyan-400 uppercase tracking-[0.35em] text-sm mb-5">
+        <div className="mb-20 text-center">
+          <p className="mb-5 text-sm uppercase tracking-[0.35em] text-cyan-400">
             Get In Touch
           </p>
 
-          <h2 className="text-5xl md:text-7xl font-black uppercase leading-[1] tracking-[0.08em]">
-            <span className="text-white">Let’s Connect</span>
+          <h2 className="text-5xl font-black uppercase leading-none tracking-[0.08em] md:text-7xl">
+            <span className="text-white">Let's Connect</span>
             <br />
             <span className="bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-              & Party Together
+              &amp; Party Together
             </span>
           </h2>
 
-          <p className="text-gray-400 mt-8 max-w-2xl mx-auto text-lg">
+          <p className="mx-auto mt-8 max-w-2xl text-lg text-gray-400">
             We’re always ready to bring you into the most exclusive nightlife
             experience. Reach out, book, or visit us for unforgettable nights.
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid lg:grid-cols-2 gap-14 items-start">
-          {/* LEFT CARDS */}
-          <div className="space-y-6">
-            {[
-              {
-                icon: <FaPhoneAlt />,
-                title: "Phone",
-                value: "+91 9876543210",
-              },
-              {
-                icon: <FaMapMarkerAlt />,
-                title: "Location",
-                value: "Deendayal, Jabalpur, Madhya Pradesh",
-              },
-              {
-                icon: <FaClock />,
-                title: "Opening Hours",
-                value: "Mon - Sun : 7PM - 4AM",
-              },
-              {
-                icon: <FaInstagram />,
-                title: "Instagram",
-                value: "@dcasapub",
-                link: "https://instagram.com/dcasapub",
-              },
-            ].map((item, index) => (
+        <div className="grid items-stretch gap-14 lg:grid-cols-2">
+          {/* Left Side */}
+          <div className="flex h-[520px] flex-col gap-4">
+            {contactItems.map((item, index) => (
               <div
                 key={index}
                 className="
-                group
-                relative
-                flex
-                gap-5
-                items-start
-                rounded-3xl
-                border
-                border-white/10
-                bg-white/[0.03]
-                backdrop-blur-xl
-                p-6
-                transition
-                duration-500
-                hover:bg-white/[0.06]
-                hover:border-cyan-500/30
+                  group
+                  relative
+                  flex
+                  flex-1
+                  items-start
+                  gap-5
+                  overflow-hidden
+                  rounded-3xl
+                  border
+                  border-white/10
+                  bg-white/[0.03]
+                  p-6
+                  backdrop-blur-xl
+                  transition-all
+                  duration-500
+                  hover:border-cyan-500/30
+                  hover:bg-white/[0.06]
                 "
               >
-                {/* Glow */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 rounded-3xl" />
+                {/* Hover Glow */}
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 opacity-0 transition duration-500 group-hover:opacity-100" />
 
                 {/* Icon */}
-                <div className="text-cyan-400 text-2xl mt-1 relative z-10">
+                <div className="relative z-10 mt-1 text-2xl text-cyan-400">
                   {item.icon}
                 </div>
 
                 {/* Content */}
                 <div className="relative z-10">
-                  <h3 className="text-white font-semibold text-lg mb-1">
+                  <h3 className="mb-1 text-lg font-semibold text-white">
                     {item.title}
                   </h3>
 
                   {item.link ? (
                     <a
                       href={item.link}
-                      target="_blank"
-                      className="text-gray-400 hover:text-cyan-400 transition"
+                      className="text-gray-400 transition hover:text-cyan-400"
+                      {...(item.external && {
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                      })}
                     >
                       {item.value}
                     </a>
@@ -113,38 +135,29 @@ const ContactSection = () => {
             ))}
           </div>
 
-          {/* RIGHT MAP */}
+          {/* Right Side Map */}
           <div
             className="
-            relative
-            overflow-hidden
-            rounded-[32px]
-            border
-            border-white/10
-            bg-white/[0.03]
-            backdrop-blur-xl
-            h-[520px]
-            shadow-[0_20px_80px_rgba(0,0,0,0.6)]
+              relative
+              h-[520px]
+              overflow-hidden
+              rounded-[32px]
+              border
+              border-white/10
+              bg-white/[0.03]
+              shadow-[0_20px_80px_rgba(0,0,0,0.6)]
+              backdrop-blur-xl
             "
           >
-            {/* Map Glow Overlay */}
-            <div
-              className="
-    absolute
-    inset-0
-    bg-gradient-to-t from-black via-transparent to-transparent
-    z-10
-    pointer-events-none
-    group-hover:opacity-30
-    transition
-  "
-            />
+            <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black via-transparent to-transparent" />
 
             <iframe
+              title="D'Casa The Pub Location"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3667.3635069438515!2d79.9157984!3d23.193419599999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3981b1d3ae8eefcd%3A0x5765c228b8a26b1d!2sD&#39;casa%20The%20Pub!5e0!3m2!1sen!2sin!4v1779303237086!5m2!1sen!2sin"
               width="100%"
               height="100%"
               loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
               className="border-0"
             />
           </div>

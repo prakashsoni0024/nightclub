@@ -3,13 +3,16 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { getEvents } from "@/services/eventService";
 import EventCard from "@/components/cards/EventCard";
 
+
 const EventsSection = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
 
   const fetchEvents = async () => {
     try {
@@ -58,7 +61,7 @@ const EventsSection = () => {
               mb-5
               "
             >
-              Upcoming Experiences
+              Upcoming Events
             </motion.p>
 
             {/* Heading */}
@@ -102,9 +105,7 @@ const EventsSection = () => {
               max-w-2xl
               "
             >
-              Discover immersive nightlife experiences featuring world-class DJs,
-              luxury vibes, neon visuals, live performances, and unforgettable
-              energy curated for the modern generation.
+              Join the hottest DJ nights, themed parties, live music performances, and weekend events at D'Casa The Pub in Jabalpur.
             </motion.p>
           </div>
 
@@ -115,8 +116,10 @@ const EventsSection = () => {
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
           >
-            <Link
+            {pathname !== "/events" ? (
+              <Link
               href="/events"
+              aria-label="View all upcoming events at DCASA The Pub"
               className="
               inline-flex
               items-center
@@ -141,6 +144,7 @@ const EventsSection = () => {
             >
               View All Events →
             </Link>
+            ) : null}
           </motion.div>
         </div>
 
@@ -152,11 +156,11 @@ const EventsSection = () => {
         ) : events.length === 0 ? (
           <div className="text-center py-20">
             <h3 className="text-2xl font-semibold text-white">
-              No Events Found
+              No Upcoming Events Available
             </h3>
 
             <p className="text-gray-500 mt-3">
-              New experiences are coming soon.
+              Stay tuned! New events at D'Casa The Pub will be announced soon.
             </p>
           </div>
         ) : (

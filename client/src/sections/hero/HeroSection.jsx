@@ -40,7 +40,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-sm uppercase tracking-[0.25em] text-pink-400 mb-8"
         >
-          ✦ Premium Night Experience
+          ✦ Exclusive Night Experience
         </motion.div>
 
         {/* Heading */}
@@ -78,9 +78,7 @@ font-light
 tracking-wide
 "
         >
-          Step into a futuristic nightlife experience with world-class DJs,
-          VIP lounges, immersive neon visuals, luxury cocktails, and
-          unforgettable energy till sunrise.
+          Experience the ultimate nightlife at D'Casa The Pub. Enjoy live DJ nights, premium cocktails, delicious food, VIP table booking, exciting weekend events.
         </motion.p>
 
         {/* Buttons */}

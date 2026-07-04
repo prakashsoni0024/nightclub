@@ -6,6 +6,10 @@ import {
   sendOwnerBookingEmail,
   sendCustomerBookingEmail,
 } from "../utils/sendEmail.js";
+import {
+  sendCustomerBookingSMS,
+  sendOwnerBookingSMS,
+} from "../utils/sendSMS.js";
 import { TABLE_PRICES } from "../config/tablePrices.js";
 
 // CREATE ORDER
@@ -182,6 +186,8 @@ export const verifyPayment = async (req, res) => {
     Promise.all([
       sendOwnerBookingEmail(booking),
       sendCustomerBookingEmail(booking),
+      sendOwnerBookingSMS(booking),
+      sendCustomerBookingSMS(booking),
     ]).catch((err) => {
       console.error("Email Error:", err);
     });

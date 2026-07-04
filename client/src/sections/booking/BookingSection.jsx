@@ -48,12 +48,16 @@ const BookingSection = () => {
 
     // GUEST VALIDATION
     if (name === "guests") {
-      if (value > 10) {
+      if (value === "" || (Number(value) >= 1 && Number(value) <= 10)) {
+        setFormData({
+          ...formData,
+          guests: value,
+        });
+      } else if (Number(value) > 10) {
         toast.error("Maximum 10 guests allowed");
-        return;
       }
 
-      if (value < 1) return;
+      return;
     }
 
     setFormData({
@@ -296,7 +300,7 @@ const BookingSection = () => {
             viewport={{ once: true }}
           >
             <p className="text-pink-400 uppercase tracking-[0.35em] text-sm mb-6">
-              VIP Reservation
+              Table Reservation
             </p>
 
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase leading-[1] tracking-[0.08em]">
@@ -310,9 +314,9 @@ const BookingSection = () => {
             </h2>
 
             <p className="text-gray-400 text-lg mt-8 leading-relaxed max-w-md">
-              Experience elite nightlife with premium seating, priority access,
-              signature hospitality, and an unforgettable luxury atmosphere
-              crafted for exclusive guests.
+              Reserve your table at D'Casa the pub, Jabalpur for live DJ nights,
+              weekend parties, birthday celebrations, couple nights, and special
+              events.
             </p>
 
             <div className="mt-10 space-y-3 text-sm text-gray-500">
@@ -375,8 +379,10 @@ const BookingSection = () => {
 
               <InputField
                 type="number"
-                placeholder="Number of Guests"
                 name="guests"
+                min="1"
+                max="10"
+                placeholder="Number of Guests"
                 value={formData.guests}
                 onChange={handleChange}
               />
@@ -447,7 +453,8 @@ const BookingSection = () => {
                             <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
 
                             <p className="text-green-300 text-sm font-medium tracking-wide">
-                              {availability.available} Tables Available
+                              {availability.available} Tables Available for
+                              Selected Date
                             </p>
                           </div>
                         ) : (
@@ -507,7 +514,7 @@ const BookingSection = () => {
                   {loading
                     ? "Processing Reservation..."
                     : availability?.isAvailable
-                      ? "Reserve VIP Experience"
+                      ? "Reserve Your Table"
                       : "Select Available Date"}
                 </span>
               </button>
