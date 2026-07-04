@@ -391,6 +391,7 @@ const BookingSection = () => {
               <InputField
                 type="date"
                 name="bookingDate"
+                placeholder="Select Date"
                 value={formData.bookingDate}
                 onChange={handleChange}
                 min={new Date().toISOString().split("T")[0]}

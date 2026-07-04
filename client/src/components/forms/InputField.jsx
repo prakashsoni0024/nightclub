@@ -7,7 +7,7 @@ const InputField = ({ type = "text", placeholder, name, value, onChange, min }) 
       value={value}
       onChange={onChange}
       min={min}
-      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-pink-500 transition"
+      className="w-full bg-white/5 border text-white/90 border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-pink-500 transition"
     />
   );
 };
