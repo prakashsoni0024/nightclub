@@ -408,7 +408,7 @@ const BookingSection = () => {
                   appearance-none
                   rounded-2xl
                   border border-white/10
-                  bg-black/40
+                  bg-white/5
                   backdrop-blur-xl
                   px-5
                   py-4
