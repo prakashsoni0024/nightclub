@@ -5,28 +5,35 @@ import BookingSection from "@/sections/booking/BookingSection";
 import ContactSection from "@/sections/contact/ContactSection";
 
 export const metadata = {
-  title: "D'Casa The Pub",
+  title: "D'Casa The Pub | Premier Gastropub & Bar in Vijay Nagar, Jabalpur",
   description:
-    "Experience the ultimate nightlife at D'Casa The Pub in Jabalpur. Enjoy live DJ nights, exciting events, premium drinks, delicious food, and easy online table booking.",
+    "Visit D'Casa The Pub, Jabalpur's premium gastropub and nightlife destination. Enjoy live DJ nights, handcrafted cocktails, delicious food, weekend parties, and secure online table reservations in a vibrant atmosphere.",
   keywords: [
     "D'Casa The Pub",
-    "Best Pub in Jabalpur",
-    "Best Nightclub in Jabalpur",
-    "Pub in Jabalpur",
-    "Nightclub Jabalpur",
-    "Live DJ Jabalpur",
-    "Table Booking Jabalpur",
-    "Weekend Party Jabalpur",
-    "Party Place Jabalpur",
-    "Cocktails Jabalpur",
+    "gastropub in Jabalpur",
+    "best gastropub in Jabalpur",
+    "pub in Jabalpur",
+    "best pub in Jabalpur",
+    "bar in Jabalpur",
+    "nightclub in Jabalpur",
+    "cocktail bar Jabalpur",
+    "live DJ Jabalpur",
+    "DJ night Jabalpur",
+    "weekend party Jabalpur",
+    "table booking Jabalpur",
+    "online table reservation",
+    "birthday party venue Jabalpur",
+    "corporate party venue",
+    "food and drinks Jabalpur",
+    "premium nightlife",
   ],
   alternates: {
     canonical: "https://dcasathepub.com",
   },
   openGraph: {
-    title: "D'Casa The Pub | Best Pub & Nightclub in Jabalpur",
+    title: "D'Casa The Pub | Premier Gastropub & Bar in Vijay Nagar, Jabalpur",
     description:
-      "Experience premium nightlife with live DJs, exciting events, delicious food, and easy table booking in Jabalpur.",
+      "Enjoy handcrafted cocktails, delicious food, live DJ nights, exciting events, and secure online table reservations at D'Casa The Pub.",
     url: "https://dcasathepub.com",
     siteName: "D'Casa The Pub",
     images: [
@@ -42,9 +49,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "D'Casa The Pub | Best Pub & Nightclub in Jabalpur",
+    title: "D'Casa The Pub | Premier Gastropub & Bar in Vijay Nagar, Jabalpur",
     description:
-      "Live DJ nights, premium drinks, events, food, and online table booking at D'Casa The Pub, Jabalpur.",
+      "Enjoy handcrafted cocktails, delicious food, live DJ nights, exciting events, and secure online table reservations at D'Casa The Pub.",
     images: ["/og-image.jpg"],
   },
 };

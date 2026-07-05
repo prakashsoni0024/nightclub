@@ -15,6 +15,9 @@ import {
   Cormorant_Garamond,
 } from "next/font/google";
 
+import { localBusinessSchema, websiteSchema } from "@/lib/schema";
+import { BUSINESS } from "@/lib/business";
+
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -67,52 +70,74 @@ const sora = Sora({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://D'Casathepub.com"),
+  metadataBase: new URL(BUSINESS.domain),
 
   title: {
-    default: "D'Casa The Pub",
+    default:
+      "D'Casa The Pub | Premier Gastropub & Bar in Vijay Nagar, Jabalpur",
     template: "%s | D'Casa The Pub",
   },
 
   description:
-    "Experience premium nightlife at D'Casa The Pub in Jabalpur. Enjoy live DJ nights, signature cocktails, delicious food, exciting events, and secure online table booking.",
+    "Experience D'Casa The Pub, Jabalpur's premier gastropub offering handcrafted cocktails, delicious cuisine, live DJ nights, vibrant nightlife, weekend events, and seamless online table reservations.",
 
   keywords: [
     "D'Casa The Pub",
-    "Best Pub in Jabalpur",
-    "Best Nightclub in Jabalpur",
-    "Pub in Jabalpur",
-    "Nightclub Jabalpur",
-    "Live DJ Jabalpur",
-    "Weekend Party Jabalpur",
-    "Table Booking Jabalpur",
-    "VIP Lounge Jabalpur",
-    "Cocktails Jabalpur",
+    "gastropub in Jabalpur",
+    "best gastropub in Jabalpur",
+    "pub in Jabalpur",
+    "best pub in Jabalpur",
+    "nightclub in Jabalpur",
+    "bar in Jabalpur",
+    "cocktail bar Jabalpur",
+    "restaurant and bar in Jabalpur",
+    "live DJ Jabalpur",
+    "DJ night Jabalpur",
+    "weekend party Jabalpur",
+    "party venue Jabalpur",
+    "birthday party venue Jabalpur",
+    "corporate party venue Jabalpur",
+    "table booking Jabalpur",
+    "online table reservation",
+    "premium nightlife",
+    "cocktails",
+    "mocktails",
+    "food and drinks",
+    "fine dining Jabalpur",
+    "late night dining",
+    "music pub",
+    "dance floor",
+    "cocktail lounge Jabalpur",
+    "live music Jabalpur",
+    "nightlife in Jabalpur",
+    "table reservation Jabalpur",
   ],
 
   authors: [
     {
-      name: "D'Casa The Pub",
+      name: BUSINESS.name,
     },
   ],
 
-  creator: "D'Casa The Pub",
-
-  publisher: "D'Casa The Pub",
+  creator: BUSINESS.name,
+  publisher: BUSINESS.name,
+  category: "Restaurant",
+  applicationName: BUSINESS.name,
+  referrer: "origin-when-cross-origin",
 
   alternates: {
-    canonical: "https://D'Casathepub.com",
+    canonical: "/",
   },
 
   openGraph: {
-    title: "D'Casa The Pub | Best Pub & Nightclub in Jabalpur",
+    title: "D'Casa The Pub | Premier Gastropub & Bar in Vijay Nagar, Jabalpur",
 
     description:
-      "Experience premium nightlife with live DJs, premium food, cocktails, exciting events and online table booking.",
+      "Experience D'Casa The Pub, Jabalpur's premier gastropub offering handcrafted cocktails, delicious cuisine, live DJ nights, vibrant nightlife, weekend events, and seamless online table reservations.",
 
-    url: "https://D'Casathepub.com",
+    url: BUSINESS.domain,
 
-    siteName: "D'Casa The Pub",
+    siteName: BUSINESS.name,
 
     locale: "en_IN",
 
@@ -120,10 +145,10 @@ export const metadata = {
 
     images: [
       {
-        url: "/og-image.jpg",
+        url: `${BUSINESS.domain}${BUSINESS.ogImage}`,
         width: 1200,
         height: 630,
-        alt: "D'Casa The Pub - Best Pub & Nightclub in Jabalpur",
+        alt: "D'Casa The Pub - Premier Gastropub & Bar in Jabalpur",
       },
     ],
   },
@@ -131,12 +156,12 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
 
-    title: "D'Casa The Pub | Best Pub & Nightclub in Jabalpur",
+    title: "D'Casa The Pub | Premier Gastropub & Bar in Vijay Nagar, Jabalpur",
 
     description:
       "Premium nightlife, live DJ, cocktails, events and online table booking in Jabalpur.",
 
-    images: ["/og-image.jpg"],
+    images: [`${BUSINESS.domain}${BUSINESS.ogImage}`],
   },
 
   robots: {
@@ -153,10 +178,21 @@ export const metadata = {
   },
 
   icons: {
-    icon: "/favicon.svg",
+    icon: BUSINESS.favicon,
     shortcut: "/favicon.svg",
     apple: "/favicon.svg",
+  },
 
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
+  },
+
+  appleWebApp: {
+    capable: true,
+    title: BUSINESS.name,
+    statusBarStyle: "black-translucent",
   },
 };
 
@@ -164,17 +200,23 @@ export const viewport = {
   themeColor: "#000000",
 };
 
+const structuredData = [localBusinessSchema, websiteSchema];
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en-IN" data-scroll-behavior="smooth">
       <body
-        className={`${inter.variable} ${playfair.variable} ${bebas.variable} ${sora.variable} ${cinzel.variable} ${greatVibes.variable} ${cormorant.variable}`}
+        className={`${inter.variable} ${playfair.variable} ${bebas.variable} ${sora.variable} ${cinzel.variable} ${greatVibes.variable} ${cormorant.variable} ${marcellus.variable} ${bodoni.variable}`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
         <Navbar />
 
-        <main className="pt-24 min-h-screen">
-          {children}
-        </main>
+        <main className="pt-24 min-h-screen">{children}</main>
 
         <Footer />
       </body>

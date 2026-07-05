@@ -42,7 +42,7 @@ const Footer = () => {
             <Link
               href="/"
               className="
-              font-[family:var(--font-great-vibes)]
+              font-marcellus
               text-4xl md:text-5xl
               bg-gradient-to-r
               from-pink-500

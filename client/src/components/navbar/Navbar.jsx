@@ -28,7 +28,7 @@ const Navbar = () => {
             className="
    
     text-3xl md:text-4xl
-    font-[family:var(--font-great-vibes)]
+    font-marcellus
     leading-none
     whitespace-nowrap
     bg-gradient-to-r

@@ -7,13 +7,14 @@ import {
 } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { motion } from "framer-motion";
+import { BUSINESS } from "@/lib/business";
 
 const contactItems = [
   {
     icon: <FaPhoneAlt />,
     title: "Phone",
-    value: "+91 98765 43210",
-    link: "tel:+919876543210",
+    value: BUSINESS.phone,
+    link: BUSINESS.phoneHref,
     external: false,
   },
   {
@@ -26,14 +27,14 @@ const contactItems = [
   {
     icon: <FaMapMarkerAlt />,
     title: "Location",
-    value: "Deendayal, Jabalpur, Madhya Pradesh",
+    value: "2nd Floor, Hotel MB Green, Deendayal, Vijay Nagar, Jabalpur",
     link: "https://maps.google.com/?q=Deendayal,+Jabalpur,+Madhya+Pradesh",
     external: true,
   },
   {
     icon: <FaClock />,
     title: "Opening Hours",
-    value: "Mon - Sun : 7:00 PM - 4:00 AM",
+    value: BUSINESS.openingHours,
   },
   {
     icon: <FaInstagram />,
@@ -80,8 +81,7 @@ const ContactSection = () => {
           </motion.h2>
 
           <p className="mx-auto mt-8 max-w-2xl text-lg text-gray-400">
-            We’re always ready to bring you into the most exclusive nightlife
-            experience. Reach out, book, or visit us for unforgettable nights.
+            Visit D'Casa The Pub in Jabalpur for premium nightlife, handcrafted cocktails, delicious food, live DJ nights, and hassle-free table reservations.
           </p>
         </div>
 
@@ -133,6 +133,7 @@ const ContactSection = () => {
                   {item.link ? (
                     <a
                       href={item.link}
+                      aria-label={item.title}
                       className="text-gray-400 transition hover:text-cyan-400"
                       {...(item.external && {
                         target: "_blank",
@@ -171,10 +172,12 @@ const ContactSection = () => {
 
             <iframe
               title="D'Casa The Pub Location"
+              aria-label="Google Map showing D'Casa The Pub location"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3667.3635069438515!2d79.9157984!3d23.193419599999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3981b1d3ae8eefcd%3A0x5765c228b8a26b1d!2sD&#39;casa%20The%20Pub!5e0!3m2!1sen!2sin!4v1779303237086!5m2!1sen!2sin"
               width="100%"
               height="100%"
               loading="lazy"
+              allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
               className="border-0"
             />

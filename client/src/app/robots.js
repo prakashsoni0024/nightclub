@@ -1,3 +1,4 @@
+import { BUSINESS } from "@/lib/business";
 export default function robots() {
   return {
     rules: [
@@ -7,8 +8,8 @@ export default function robots() {
       },
     ],
 
-    sitemap: "https://dcasathepub.com/sitemap.xml",
+    sitemap: `${BUSINESS.domain}/sitemap.xml`,
 
-    host: "https://dcasathepub.com",
+    host: BUSINESS.domain,
   };
 }
