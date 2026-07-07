@@ -14,6 +14,7 @@ import useGallery from "@/hooks/admin/useGallery";
 import useAvailability from "@/hooks/admin/useAvailability";
 import useBookingFilters from "@/hooks/admin/useBookingFilters";
 
+
 /* Utils */
 import { getDashboardStats } from "@/utils/dashboardStats";
 
@@ -28,9 +29,9 @@ import EventsSection from "@/components/admin/EventsSection";
 import GallerySection from "@/components/admin/GallerySection";
 import AccountSettings from "@/components/admin/AccountSettings";
 
-export default function AdminPage() {
 
- /* Local State */
+export default function AdminPage() {
+  /* Local State */
   const [activeSection, setActiveSection] = useState("Dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [reportPeriod, setReportPeriod] = useState("week");
@@ -76,11 +77,11 @@ export default function AdminPage() {
     filteredBookings,
   } = useBookingFilters(bookings);
 
- 
+
   /* Dashboard Stats */
   const dashboardStats = getDashboardStats(bookings, events, gallery);
 
- /* Event Handlers */
+  /* Event Handlers */
   const handleSidebarClick = (label) => {
     setActiveSection(label);
 
@@ -178,6 +179,8 @@ export default function AdminPage() {
             handleDeleteImage={handleDeleteImage}
             galleryDeleteLoading={galleryDeleteLoading}
           />
+
+
 
           <AccountSettings />
         </main>

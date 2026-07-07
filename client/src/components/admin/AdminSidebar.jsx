@@ -1,5 +1,5 @@
 "use client";
-
+ 
 import {
   Calendar,
   ImageIcon,
@@ -8,6 +8,8 @@ import {
   Settings,
   Ticket,
   X,
+  UtensilsCrossed,
+  FolderOpen,
 } from "lucide-react";
 
 export default function AdminSidebar({
@@ -18,29 +20,38 @@ export default function AdminSidebar({
   handleLogout,
 }) {
 
-  
-  const menu = [
-    {
-      icon: LayoutDashboard,
-      label: "Dashboard",
-    },
-    {
-      icon: Ticket,
-      label: "Bookings",
-    },
-    {
-      icon: Calendar,
-      label: "Events",
-    },
-    {
-      icon: ImageIcon,
-      label: "Gallery",
-    },
-    {
-      icon: Settings,
-      label: "Settings",
-    },
-  ];
+
+
+const menu = [
+  {
+    icon: LayoutDashboard,
+    label: "Dashboard",
+  },
+  {
+    icon: Ticket,
+    label: "Bookings",
+  },
+  {
+    icon: Calendar,
+    label: "Events",
+  },
+  {
+    icon: ImageIcon,
+    label: "Gallery",
+  },
+  {
+    icon: FolderOpen,
+    label: "Categories",
+  },
+  {
+    icon: UtensilsCrossed,
+    label: "Menu Items",
+  },
+  {
+    icon: Settings,
+    label: "Settings",
+  },
+];
 
   return (
     <>

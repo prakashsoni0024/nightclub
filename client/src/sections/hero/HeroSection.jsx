@@ -7,7 +7,6 @@ import { FaPlay } from "react-icons/fa";
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen overflow-hidden flex items-center justify-center bg-black">
-      
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center scale-110"
@@ -32,13 +31,34 @@ const HeroSection = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
-        
         {/* Premium Badge */}
         <motion.div
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-sm uppercase tracking-[0.25em] text-pink-400 mb-8"
+          className="
+    inline-flex
+    items-center
+    gap-1.5
+    sm:gap-2
+    px-3
+    sm:px-4
+    py-1.5
+    sm:py-2
+    rounded-full
+    border
+    border-white/10
+    bg-white/5
+    backdrop-blur-xl
+    text-[10px]
+    sm:text-sm
+    uppercase
+    tracking-[0.15em]
+    sm:tracking-[0.25em]
+    text-pink-400
+    mb-6
+    sm:mb-8
+  "
         >
           ✦ Exclusive Night Experience
         </motion.div>
@@ -78,7 +98,9 @@ font-light
 tracking-wide
 "
         >
-          Experience the ultimate nightlife at D'Casa The Pub. Enjoy live DJ nights, premium cocktails, delicious food, VIP table booking, exciting weekend events.
+          Experience the ultimate nightlife at D'Casa The Pub. Enjoy live DJ
+          nights, premium cocktails, delicious food, VIP table booking, exciting
+          weekend events.
         </motion.p>
 
         {/* Buttons */}
@@ -88,7 +110,6 @@ tracking-wide
           transition={{ delay: 0.8 }}
           className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-5"
         >
-          
           {/* Primary Button */}
           <Link
             href="/booking"
